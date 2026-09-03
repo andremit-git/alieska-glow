@@ -1,0 +1,549 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Alieska Glow · Panel de productos</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --fondo:#FFE9F1; --tinta:#3A0F27; --rosa:#E02D6D; --lima:#B7E63C;
+    --blanco:#FFFFFF; --borde:2.5px solid var(--tinta); --rojo:#B3123F;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;background:var(--fondo);color:var(--tinta);
+    font-family:"Nunito",system-ui,sans-serif;font-size:16.5px;line-height:1.55;
+  }
+  h1,h2,h3{font-family:"Baloo 2","Nunito",sans-serif;margin:0}
+
+  .topbar{
+    display:flex;align-items:center;justify-content:space-between;gap:14px;
+    padding:14px 5vw;background:var(--fondo);border-bottom:var(--borde);
+    position:sticky;top:0;z-index:20;
+  }
+  .logo{display:inline-flex;align-items:center;gap:9px;font-family:"Baloo 2";
+    font-size:22px;font-weight:800;text-decoration:none;color:var(--tinta)}
+  .logo-img{height:40px;width:auto;display:block}
+  .topbar a.btn{font-size:15px;padding:9px 18px}
+
+  .btn{
+    display:inline-block;padding:12px 22px;border-radius:999px;
+    font-family:inherit;font-weight:800;font-size:16px;text-decoration:none;
+    border:var(--borde);cursor:pointer;background:var(--blanco);color:var(--tinta);
+  }
+  .btn-primario{background:var(--rosa);color:#fff;box-shadow:4px 4px 0 var(--tinta);transition:transform .15s,box-shadow .15s}
+  .btn-primario:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--tinta)}
+  .btn-primario:disabled{opacity:.55;cursor:wait;transform:none;box-shadow:4px 4px 0 var(--tinta)}
+  .btn-rojo{background:#fff;color:var(--rojo);border-color:var(--rojo)}
+  .btn-rojo:hover{background:var(--rojo);color:#fff}
+  .btn-mini{padding:7px 14px;font-size:14px}
+
+  .contenedor{max-width:860px;margin:0 auto;padding:34px 5vw 90px}
+  .tarjeta{
+    background:var(--blanco);border:var(--borde);border-radius:22px;
+    padding:26px;box-shadow:6px 6px 0 rgba(224,45,109,.25);
+  }
+
+  label{display:block;font-weight:800;font-size:14.5px;margin:14px 0 5px}
+  input[type=text],input[type=password],input[type=number],textarea{
+    width:100%;padding:11px 14px;border:2.5px solid var(--tinta);border-radius:14px;
+    font-family:inherit;font-size:16px;color:var(--tinta);background:#fff;
+  }
+  textarea{resize:vertical;min-height:64px}
+  input:focus,textarea:focus{outline:3px solid var(--rosa);outline-offset:2px}
+
+  .nota{font-size:14px;color:rgba(58,15,39,.7);font-weight:600}
+  .error{background:#FFE1E9;border:2px solid var(--rojo);border-radius:14px;
+    padding:11px 14px;font-weight:700;color:var(--rojo);font-size:14.5px;margin-top:14px}
+  .aviso{background:#FFF7D6;border:2px solid #C9A24B;border-radius:14px;
+    padding:11px 14px;font-weight:700;font-size:14.5px;margin-top:14px}
+  .exito{background:#E7F9EC;border:2px solid #1FB855;border-radius:14px;
+    padding:11px 14px;font-weight:800;color:#0E6B33;font-size:15px;margin-top:14px}
+  .oculto{display:none !important}
+
+  details{margin-top:16px;font-size:14.5px;font-weight:600}
+  details summary{cursor:pointer;font-weight:800}
+  details ol{margin:8px 0 0;padding-left:22px;display:grid;gap:5px}
+
+  .barra{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:8px}
+  .barra .conexion{font-weight:800;font-size:14.5px}
+  .barra .conexion small{display:block;font-weight:600;color:rgba(58,15,39,.65)}
+
+  .acciones{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:18px 0 6px}
+  .pill-pendiente{
+    display:none;background:var(--lima);border:var(--borde);border-radius:999px;
+    padding:4px 13px;font-weight:800;font-size:13.5px;
+  }
+  .pill-pendiente.visible{display:inline-block}
+
+  ul.lista{list-style:none;margin:16px 0 0;padding:0;display:grid;gap:14px}
+  .fila{
+    display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+    background:var(--blanco);border:var(--borde);border-radius:18px;padding:13px 16px;
+  }
+  .mini{width:58px;height:58px;border-radius:14px;border:var(--borde);flex:none;
+    position:relative;overflow:hidden;
+    background:linear-gradient(135deg,#FFD3E3,#E02D6D)}
+  .mini img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .fila-info{flex:1;min-width:180px}
+  .fila-info strong{display:block;font-size:16.5px;line-height:1.25}
+  .fila-info span{font-size:13.5px;color:rgba(58,15,39,.65);font-weight:600}
+  .fila-precio{font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .fila-botones{display:flex;gap:8px;align-items:center}
+  .fila.vacia-lista{justify-content:center;font-weight:800}
+
+  .interruptor{display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-weight:800;font-size:13.5px}
+  .interruptor input{position:absolute;opacity:0;width:0;height:0}
+  .pista{width:46px;height:26px;border:var(--borde);border-radius:999px;background:#E9D6DF;
+    position:relative;transition:background .2s;flex:none}
+  .pista::after{content:"";position:absolute;top:2px;left:2px;width:18px;height:18px;
+    border-radius:50%;background:#fff;border:2px solid var(--tinta);transition:left .2s}
+  .interruptor input:checked + .pista{background:var(--lima)}
+  .interruptor input:checked + .pista::after{left:22px}
+  .interruptor input:focus-visible + .pista{outline:3px solid var(--rosa);outline-offset:2px}
+
+  .editor-foto{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-top:4px}
+  .editor-foto .mini{width:96px;height:96px}
+  input[type=file]{font-weight:700;font-size:14px;max-width:260px}
+
+  :where(a,button):focus-visible{outline:3px solid var(--rosa);outline-offset:3px;border-radius:8px}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <a class="logo" href="index.html"><img class="logo-img" src="img/logo-alieska-glow.png" alt="">Panel de productos</a>
+  <a class="btn btn-mini" href="index.html">Ver tienda</a>
+</header>
+
+<div class="contenedor">
+
+  <!-- ====== conexión ====== -->
+  <section id="seccion-login" class="tarjeta">
+    <h1 style="font-size:28px">Conectar tu panel</h1>
+    <p class="nota" style="margin-top:8px">Estos datos se guardan <strong>solo en este navegador</strong>, nunca en la página pública. Conéctate desde tu celular o computadora de confianza.</p>
+
+    <label for="usuario">Usuario de GitHub</label>
+    <input type="text" id="usuario" autocomplete="off" placeholder="tu-usuario">
+
+    <label for="repo">Repositorio</label>
+    <input type="text" id="repo" value="alieska-glow">
+
+    <label for="rama">Rama</label>
+    <input type="text" id="rama" value="main">
+
+    <label for="token">Token de acceso (github_pat_…)</label>
+    <input type="password" id="token" autocomplete="off" placeholder="Pega aquí tu token">
+
+    <details>
+      <summary>¿Cómo consigo mi token? (2 minutos)</summary>
+      <ol>
+        <li>Entra a <strong>github.com</strong> con tu cuenta y haz clic en tu foto → <strong>Settings</strong>.</li>
+        <li>Abajo a la izquierda: <strong>Developer settings</strong>.</li>
+        <li><strong>Personal access tokens → Fine-grained tokens</strong> → <strong>Generate new token</strong>.</li>
+        <li>En <strong>Repository access</strong> elige «Only select repositories» y marca <strong>alieska-glow</strong>.</li>
+        <li>En <strong>Permissions → Repository permissions → Contents</strong> elige <strong>Read and write</strong>.</li>
+        <li>Genera el token, cópialo y pégalo arriba. Caduca cuando tú elijas (puedes poner «No expiration»).</li>
+      </ol>
+    </details>
+
+    <p style="margin-top:20px"><button class="btn btn-primario" id="btnConectar">Conectar</button></p>
+    <p class="error oculto" id="error-login"></p>
+  </section>
+
+  <!-- ====== panel ====== -->
+  <section id="seccion-panel" class="oculto">
+    <div class="barra">
+      <div class="conexion" id="texto-conexion"></div>
+      <button class="btn btn-mini" id="btnSalir">Cerrar sesión</button>
+    </div>
+
+    <div class="acciones">
+      <button class="btn" id="btnNuevo">+ Agregar producto</button>
+      <button class="btn btn-primario" id="btnGuardar">Guardar cambios en la web</button>
+      <span class="pill-pendiente" id="pill-pendiente">Cambios sin guardar</span>
+    </div>
+    <p class="nota" id="mensaje-estado" style="margin:4px 0 0"></p>
+
+    <ul class="lista" id="lista"></ul>
+
+    <!-- ====== editor de producto ====== -->
+    <div class="tarjeta oculto" id="editor" style="margin-top:22px">
+      <h2 style="font-size:24px" id="editor-titulo">Nuevo producto</h2>
+
+      <label for="e-nombre">Nombre</label>
+      <input type="text" id="e-nombre" placeholder="Ej. Labial mate «Cereza»">
+
+      <label for="e-precio">Precio (solo el número)</label>
+      <input type="number" id="e-precio" min="0" step="1" placeholder="8500">
+
+      <label for="e-detalle">Descripción corta</label>
+      <textarea id="e-detalle" placeholder="Ej. Cobertura total, fórmula aterciopelada"></textarea>
+
+      <label>Foto</label>
+      <div class="editor-foto">
+        <span class="mini" id="e-foto-prev"></span>
+        <div>
+          <input type="file" id="e-foto" accept="image/*">
+          <p class="nota" style="margin:6px 0 0">La foto se ajusta sola. Si no subes ninguna, se muestra un cuadro de color.</p>
+        </div>
+      </div>
+
+      <label class="interruptor" style="margin-top:18px">
+        <input type="checkbox" id="e-disponible" checked>
+        <span class="pista"></span>
+        Producto disponible (desactívalo para mostrarlo como agotado)
+      </label>
+
+      <p style="margin-top:22px;display:flex;gap:12px;flex-wrap:wrap">
+        <button class="btn btn-primario" id="btnGuardarProducto">Listo</button>
+        <button class="btn" id="btnCancelarProducto">Cancelar</button>
+      </p>
+    </div>
+  </section>
+</div>
+
+<script>
+  /* ================= datos de ejemplo (respaldo) ================= */
+  const PRODUCTOS_EJEMPLO = [
+    { id:1, nombre:"Labial mate «Rosa Nube»", detalle:"Cobertura total, fórmula aterciopelada", precio:8500,  disponible:true,  colores:["#FF8FB1","#E02D6D"] },
+    { id:2, nombre:"Gloss «Miel Caliente»",   detalle:"Brillo espejo con aceite de jojoba",      precio:6900,  disponible:true,  colores:["#FFD86F","#FF8A5C"] },
+    { id:3, nombre:"Paleta «Atardecer» 12",   detalle:"Mate y satinados, pigmento alto",         precio:21900, disponible:true,  colores:["#F9C5A0","#B04A8F"] },
+    { id:4, nombre:"Base «Porcelana»",        detalle:"Acabado natural, 8 tonos",                precio:15900, disponible:false, colores:["#F2DCC8","#DBB08C"] },
+    { id:5, nombre:"Rubor «Durazno»",         detalle:"Toque de color para las mejillas",        precio:7500,  disponible:true,  colores:["#FFB39B","#F2695C"] },
+    { id:6, nombre:"Delineador «Trazo Fino»", detalle:"Punta de fieltro, negro intenso 24 h",    precio:5900,  disponible:true,  colores:["#4A4A5A","#101018"] },
+    { id:7, nombre:"Máscara «Pestañazo»",     detalle:"Volumen extremo, sin grumos",             precio:9900,  disponible:false, colores:["#5A5470","#16121F"] },
+    { id:8, nombre:"Set de brochas · 6 pzs",  detalle:"Fibras suaves + neceser de regalo",       precio:14500, disponible:true,  colores:["#E7D4EF","#9C7BB9"] }
+  ];
+
+  /* ================= estado ================= */
+  const $ = s => document.querySelector(s);
+  let config  = null;    // {usuario, repo, rama, token}
+  let productos = [];
+  let shaProductos = null;
+  let fotosPendientes = {}; // id -> base64 (imagen nueva por subir)
+  let cambiosPendientes = false;
+  let editandoId = null;
+  let editandoEsNuevo = false;
+
+  const fmt = n => "$" + Number(n || 0).toLocaleString("es-MX");
+
+  /* ================= utilidades base64 (soporta acentos) ================= */
+  function bytesABase64(bytes){
+    let bin = "";
+    const paso = 0x8000;
+    for(let i = 0; i < bytes.length; i += paso){
+      bin += String.fromCharCode.apply(null, bytes.subarray(i, i + paso));
+    }
+    return btoa(bin);
+  }
+  function textoABase64(str){ return bytesABase64(new TextEncoder().encode(str)); }
+  function base64ATexto(b64){
+    const bytes = Uint8Array.from(atob(b64), c => c.charCodeAt(0));
+    return new TextDecoder().decode(bytes);
+  }
+
+  /* ================= GitHub ================= */
+  function gh(ruta, metodo = "GET", cuerpo = null){
+    return fetch(`https://api.github.com/repos/${config.usuario}/${config.repo}/contents/${ruta}?ref=${encodeURIComponent(config.rama)}`, {
+      method: metodo,
+      headers: {
+        "Authorization": "Bearer " + config.token,
+        "Accept": "application/vnd.github+json",
+        "X-GitHub-Api-Version": "2022-11-28"
+      },
+      body: cuerpo ? JSON.stringify(cuerpo) : undefined
+    });
+  }
+
+  async function errorDe(r){
+    if(r.status === 401) return "El token no es válido o expiró. Genera otro y conéctate de nuevo.";
+    if(r.status === 403) return "El token no tiene permiso de escritura. En el token, la permisión «Contents» debe ser «Read and write».";
+    if(r.status === 404) return "No encontré el repositorio o la rama. Revisa usuario, repositorio y rama (¿el repositorio se llama exactamente así?).";
+    if(r.status === 409) return "Hubo un conflicto al guardar (alguien más guardó a la vez). Vuelve a intentar.";
+    return "Error " + r.status + " al hablar con GitHub. Revisa tu conexión e inténtalo de nuevo.";
+  }
+
+  /* ================= conexión ================= */
+  function mostrarErrorLogin(msg){
+    const el = $("#error-login");
+    el.textContent = msg;
+    el.classList.remove("oculto");
+  }
+
+  async function conectar(){
+    const usuario = $("#usuario").value.trim();
+    const repo    = $("#repo").value.trim();
+    const rama    = $("#rama").value.trim() || "main";
+    const token   = $("#token").value.trim();
+    if(!usuario || !repo || !token){
+      mostrarErrorLogin("Completa usuario, repositorio y token.");
+      return;
+    }
+    config = { usuario, repo, rama, token };
+
+    const btn = $("#btnConectar");
+    btn.disabled = true; btn.textContent = "Conectando…";
+    $("#error-login").classList.add("oculto");
+    try{
+      await cargar();                       // valida token + repo + carga lista
+      localStorage.setItem("alieska-admin", JSON.stringify(config));
+      entrar();
+    }catch(e){
+      mostrarErrorLogin(e.message);
+      config = null;
+    }finally{
+      btn.disabled = false; btn.textContent = "Conectar";
+    }
+  }
+
+  function entrar(){
+    $("#seccion-login").classList.add("oculto");
+    $("#seccion-panel").classList.remove("oculto");
+    $("#texto-conexion").innerHTML =
+      `Conectada a <strong>github.com/${config.usuario}/${config.repo}</strong>` +
+      `<small>rama: ${config.rama} · el token vive solo en este navegador</small>`;
+  }
+
+  function salir(){
+    localStorage.removeItem("alieska-admin");
+    location.reload();
+  }
+
+  async function cargar(){
+    const r = await gh("productos.json");
+    if(r.status === 404){
+      productos = PRODUCTOS_EJEMPLO.map(p => ({ ...p }));
+      shaProductos = null;
+      $("#mensaje-estado").textContent =
+        "El repositorio aún no tiene productos.json: se creará la primera vez que guardes.";
+      renderLista();
+      return;
+    }
+    if(!r.ok) throw new Error(await errorDe(r));
+    const j = await r.json();
+    shaProductos = j.sha;
+    productos = JSON.parse(base64ATexto(j.content.replace(/\s/g, "")));
+    if(!Array.isArray(productos)) productos = [];
+    $("#mensaje-estado").textContent = "";
+    renderLista();
+  }
+
+  /* ================= guardar en la web ================= */
+  async function guardarEnWeb(){
+    const btn = $("#btnGuardar");
+    btn.disabled = true;
+    const previo = btn.textContent;
+    btn.textContent = "Guardando…";
+    try{
+      const texto = JSON.stringify(productos, null, 2);
+      const cuerpo = { message: "Actualiza catálogo de productos", content: textoABase64(texto), branch: config.rama };
+      if(shaProductos) cuerpo.sha = shaProductos;
+      let r = await gh("productos.json", "PUT", cuerpo);
+      if(!r.ok) throw new Error(await errorDe(r));
+      const j = await r.json();
+      shaProductos = j.content.sha;
+
+      for(const id of Object.keys(fotosPendientes)){
+        await subirFoto(+id, fotosPendientes[id]);
+        delete fotosPendientes[id];
+      }
+
+      cambiosPendientes = false;
+      actualizarPendiente();
+      const estado = $("#mensaje-estado");
+      estado.innerHTML = '<span class="exito" style="display:inline-block">Cambios guardados ✓ Tu tienda se actualiza sola en 1–2 minutos.</span>';
+      setTimeout(()=>{ estado.textContent = ""; }, 8000);
+    }catch(e){
+      $("#mensaje-estado").innerHTML = '<span class="error" style="display:inline-block">' + e.message + '</span>';
+    }finally{
+      btn.disabled = false;
+      btn.textContent = previo;
+    }
+  }
+
+  async function subirFoto(id, base64){
+    const ruta = "img/producto-" + id + ".jpg";
+    let sha = null;
+    const r0 = await gh(ruta);
+    if(r0.ok) sha = (await r0.json()).sha;
+    const cuerpo = { message: "Actualiza foto del producto " + id, content: base64, branch: config.rama };
+    if(sha) cuerpo.sha = sha;
+    const r = await gh(ruta, "PUT", cuerpo);
+    if(!r.ok) throw new Error("No pude subir la foto del producto " + id + ". " + await errorDe(r));
+  }
+
+  function marcarPendiente(){
+    cambiosPendientes = true;
+    actualizarPendiente();
+  }
+  function actualizarPendiente(){
+    $("#pill-pendiente").classList.toggle("visible", cambiosPendientes);
+  }
+  window.addEventListener("beforeunload", e => {
+    if(cambiosPendientes){ e.preventDefault(); e.returnValue = ""; }
+  });
+
+  /* ================= lista ================= */
+  function renderLista(){
+    const ul = $("#lista");
+    if(!productos.length){
+      ul.innerHTML = '<li class="fila vacia-lista">No hay productos. Agrega el primero.</li>';
+      return;
+    }
+    ul.innerHTML = productos.map(p => `
+      <li class="fila">
+        <span class="mini"><img src="img/producto-${p.id}.jpg" alt="" onerror="this.remove()"></span>
+        <div class="fila-info">
+          <strong>${p.nombre}</strong>
+          <span>${p.detalle || ""}</span>
+        </div>
+        <span class="fila-precio">${fmt(p.precio)}</span>
+        <label class="interruptor" title="Marcar disponible o agotado">
+          <input type="checkbox" data-toggle="${p.id}" ${p.disponible ? "checked" : ""}>
+          <span class="pista"></span>
+        </label>
+        <span class="fila-botones">
+          <button class="btn btn-mini" data-editar="${p.id}">Editar</button>
+          <button class="btn btn-mini btn-rojo" data-borrar="${p.id}">Borrar</button>
+        </span>
+      </li>`).join("");
+  }
+
+  /* ================= editor ================= */
+  function abrirEditor(p){
+    editandoId = p ? p.id : proximoId();
+    editandoEsNuevo = !p;
+    $("#editor-titulo").textContent = p ? "Editar producto" : "Nuevo producto";
+    $("#e-nombre").value   = p ? p.nombre : "";
+    $("#e-precio").value   = p ? p.precio : "";
+    $("#e-detalle").value  = p ? (p.detalle || "") : "";
+    $("#e-disponible").checked = p ? !!p.disponible : true;
+    $("#e-foto").value = "";
+    const prev = $("#e-foto-prev");
+    prev.innerHTML = '<img src="img/producto-' + editandoId + '.jpg" alt="" onerror="this.remove()">';
+    $("#editor").classList.remove("oculto");
+    $("#e-nombre").focus();
+  }
+
+  function cerrarEditor(){
+    if(editandoEsNuevo && !productos.some(x => x.id === editandoId)){
+      delete fotosPendientes[editandoId];   // no dejar fotos huérfanas
+    }
+    $("#editor").classList.add("oculto");
+    editandoId = null;
+    editandoEsNuevo = false;
+  }
+
+  function proximoId(){
+    return productos.reduce((m, p) => Math.max(m, p.id), 0) + 1;
+  }
+
+  function guardarProducto(){
+    const nombre = $("#e-nombre").value.trim();
+    const precio = Math.round(Number($("#e-precio").value));
+    if(!nombre){ alert("Escribe el nombre del producto."); return; }
+    if(!precio || precio <= 0){ alert("Escribe un precio válido (solo el número)."); return; }
+
+    const existente = productos.find(p => p.id === editandoId);
+    const datos = {
+      id: editandoId,
+      nombre,
+      detalle: $("#e-detalle").value.trim(),
+      precio,
+      disponible: $("#e-disponible").checked,
+      colores: existente ? existente.colores : ["#FF8FB1", "#E02D6D"]
+    };
+    if(existente){
+      Object.assign(existente, datos);
+    } else {
+      productos.push(datos);
+    }
+    marcarPendiente();
+    renderLista();
+    cerrarEditor();
+  }
+
+  async function prepararFoto(archivo){
+    const bmp = await createImageBitmap(archivo);
+    const cargar = async (lado, calidad) => {
+      const escala = Math.min(1, lado / Math.max(bmp.width, bmp.height));
+      const c = document.createElement("canvas");
+      c.width  = Math.max(1, Math.round(bmp.width * escala));
+      c.height = Math.max(1, Math.round(bmp.height * escala));
+      c.getContext("2d").drawImage(bmp, 0, 0, c.width, c.height);
+      const blob = await new Promise(res => c.toBlob(res, "image/jpeg", calidad));
+      return new Uint8Array(await blob.arrayBuffer());
+    };
+    let bytes = await cargar(1000, 0.82);
+    if(bytes.length > 850 * 1024) bytes = await cargar(700, 0.72);
+    return bytesABase64(bytes);
+  }
+
+  /* ================= eventos ================= */
+  $("#btnConectar").addEventListener("click", conectar);
+  $("#token").addEventListener("keydown", e => { if(e.key === "Enter") conectar(); });
+  $("#btnSalir").addEventListener("click", salir);
+  $("#btnGuardar").addEventListener("click", guardarEnWeb);
+  $("#btnNuevo").addEventListener("click", () => abrirEditor(null));
+  $("#btnGuardarProducto").addEventListener("click", guardarProducto);
+  $("#btnCancelarProducto").addEventListener("click", cerrarEditor);
+  $("#e-foto").addEventListener("change", async e => {
+    const archivo = e.target.files[0];
+    if(!archivo || !editandoId) return;
+    const estado = $("#mensaje-estado");
+    estado.textContent = "Procesando foto…";
+    try{
+      fotosPendientes[editandoId] = await prepararFoto(archivo);
+      $("#e-foto-prev").innerHTML = '<img src="data:image/jpeg;base64,' + fotosPendientes[editandoId] + '" alt="">';
+      marcarPendiente();
+      estado.textContent = "";
+    }catch(err){
+      estado.textContent = "No pude leer esa imagen. Prueba con otra (JPG o PNG).";
+      e.target.value = "";
+    }
+  });
+
+  $("#lista").addEventListener("click", e => {
+    const tgl  = e.target.closest("[data-toggle]");
+    const ed   = e.target.closest("[data-editar]");
+    const borrar = e.target.closest("[data-borrar]");
+    if(tgl){
+      const p = productos.find(x => x.id === +tgl.dataset.toggle);
+      if(p){ p.disponible = tgl.checked; marcarPendiente(); }
+      return;
+    }
+    if(ed){ abrirEditor(productos.find(x => x.id === +ed.dataset.editar)); return; }
+    if(borrar){
+      const id = +borrar.dataset.borrar;
+      const p = productos.find(x => x.id === id);
+      if(confirm("¿Borrar «" + p.nombre + "» de la tienda? (Se guarda al presionar «Guardar cambios en la web».)")){
+        if(productos.length === 1){ alert("Debe quedar al menos un producto en el catálogo."); return; }
+        productos = productos.filter(x => x.id !== id);
+        delete fotosPendientes[id];
+        marcarPendiente();
+        renderLista();
+      }
+    }
+  });
+
+  /* ================= arranque ================= */
+  (function arrancar(){
+    try{
+      const guardado = JSON.parse(localStorage.getItem("alieska-admin") || "null");
+      if(guardado && guardado.token){
+        $("#usuario").value = guardado.usuario || "";
+        $("#repo").value    = guardado.repo || "alieska-glow";
+        $("#rama").value    = guardado.rama || "main";
+        $("#token").value   = guardado.token || "";
+      }
+    }catch(e){}
+  })();
+</script>
+</body>
+</html>

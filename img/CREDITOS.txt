@@ -1,0 +1,11 @@
+Fotos de ejemplo (bancos de imágenes gratuitos). Cuando tengas tus propias fotos,
+reemplaza estos archivos manteniendo el mismo nombre.
+
+producto-1.jpg | "Various colorful lip balm sticks" | Rawpixel Ltd | CC BY 2.0 | https://www.flickr.com/photos/147875007@N03/39726223570
+producto-2.jpg | "e.l.f. Candy Shop lip gloss" | Wikimedia Commons (flickr: 9376...) | CC BY 2.0 | https://commons.wikimedia.org/wiki/File:ELF_Candy_Shop_lip_gloss.jpg
+producto-3.jpg | "makeup palette" | Dominique Godbout | CC BY 2.0 | https://www.flickr.com/photos/34313239@N02/5190648757
+producto-4.jpg | "Foundation (cosmetics)" | Calliopejen1 | CC BY-SA 3.0 | https://commons.wikimedia.org/wiki/File:Foundation_(cosmetics).jpg
+producto-5.jpg | "Make Up" | aWee | CC BY 2.0 | https://www.flickr.com/photos/31751386@N00/6987063
+producto-6.jpg | "Hand holding eyeliner pencil" | DS stories | Licencia Pexels | https://www.pexels.com/photo/hand-holding-eyeliner-pencil-7256089/
+producto-7.jpg | "Mascara (Object)" | Jenn Durfey | CC BY 2.0 | https://www.flickr.com/photos/52498245@N03/5365866358
+producto-8.jpg | "Makeup Brush on White Background" | Trostle | CC BY 2.0 | https://www.flickr.com/photos/42183150@N00/6848775772

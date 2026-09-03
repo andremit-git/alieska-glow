@@ -1,0 +1,519 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Alieska Glow · Maquillaje que se siente tuyo</title>
+<meta name="description" content="Catálogo de maquillaje con carrito y pedidos por WhatsApp.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --fondo:#FFE9F1;
+    --tinta:#3A0F27;
+    --rosa:#E02D6D;
+    --lima:#B7E63C;
+    --blanco:#FFFFFF;
+    --wsp:#1FB855;
+    --borde:2.5px solid var(--tinta);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    background:var(--fondo);
+    color:var(--tinta);
+    font-family:"Nunito",system-ui,sans-serif;
+    font-size:17px;
+    line-height:1.55;
+  }
+  h1,h2,h3,.logo{font-family:"Baloo 2","Nunito",sans-serif}
+  .oculto{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+  /* ---------- barra superior ---------- */
+  .topbar{
+    position:sticky;top:0;z-index:50;
+    display:flex;align-items:center;justify-content:space-between;gap:16px;
+    padding:14px 5vw;
+    background:var(--fondo);
+    border-bottom:var(--borde);
+  }
+  .logo{display:inline-flex;align-items:center;gap:9px;font-size:25px;font-weight:800;text-decoration:none;color:var(--tinta);line-height:1}
+  .logo::after{content:"";display:inline-block;width:11px;height:11px;background:var(--rosa);border-radius:50%}
+  .logo-img{height:42px;width:auto;display:block}
+  .topnav{display:flex;gap:24px}
+  .topnav a{color:var(--tinta);font-weight:800;text-decoration:none}
+  .topnav a:hover{color:var(--rosa)}
+  .cart-btn{
+    position:relative;
+    display:flex;align-items:center;gap:9px;
+    background:var(--blanco);border:var(--borde);border-radius:16px;
+    padding:9px 16px;font-family:inherit;font-weight:800;font-size:16px;color:var(--tinta);
+    cursor:pointer;transition:transform .15s;
+  }
+  .cart-btn:hover{transform:translate(-2px,-2px)}
+  .cart-count{
+    position:absolute;top:-11px;right:-11px;
+    background:var(--lima);border:var(--borde);border-radius:999px;
+    min-width:26px;height:26px;display:grid;place-items:center;
+    font-size:13px;font-weight:800;padding:0 4px;
+  }
+  .cart-count.bump{animation:bump .4s}
+  @keyframes bump{0%{transform:scale(1)}45%{transform:scale(1.4)}100%{transform:scale(1)}}
+
+  /* ---------- héroe ---------- */
+  .hero{
+    max-width:1120px;margin:0 auto;
+    display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center;
+    padding:60px 5vw 30px;
+  }
+  .hero h1{font-size:clamp(40px,5.4vw,64px);line-height:1.04;margin:18px 0 16px;font-weight:800}
+  h1 .chip{
+    display:inline-block;background:var(--lima);
+    border:var(--borde);border-radius:.32em;
+    padding:0 .24em;transform:rotate(-2.5deg);
+    box-shadow:4px 4px 0 var(--rosa);
+  }
+  .hero-sub{max-width:46ch;margin:0 0 28px;font-size:18px}
+  .hero-cta{display:flex;gap:14px;flex-wrap:wrap}
+  .btn{
+    display:inline-block;padding:13px 26px;border-radius:999px;
+    font-family:inherit;font-weight:800;font-size:17px;text-decoration:none;
+    border:var(--borde);cursor:pointer;
+  }
+  .btn-primary{background:var(--rosa);color:#fff;box-shadow:4px 4px 0 var(--tinta);transition:transform .15s,box-shadow .15s}
+  .btn-primary:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--tinta)}
+  .btn-ghost{background:transparent;color:var(--tinta)}
+  .btn-ghost:hover{background:var(--blanco)}
+
+  .hero-art{position:relative;min-height:430px}
+  .blob{
+    position:absolute;inset:0 6% 4% 2%;
+    background:radial-gradient(120% 120% at 22% 16%,#FFD9E7,#FFBFD6);
+    border:var(--borde);
+    border-radius:58% 42% 55% 45% / 55% 48% 52% 45%;
+  }
+  .lipstick{
+    position:absolute;left:50%;bottom:9%;
+    transform:translateX(-50%) rotate(6deg);
+    display:flex;flex-direction:column;align-items:center;
+    animation:flotar 5s ease-in-out infinite;
+    filter:drop-shadow(9px 10px 0 rgba(58,15,39,.16));
+  }
+  @keyframes flotar{
+    0%,100%{transform:translateX(-50%) rotate(6deg) translateY(0)}
+    50%{transform:translateX(-50%) rotate(6deg) translateY(-13px)}
+  }
+  .bullet{
+    width:62px;height:92px;
+    border-radius:31px 31px 10px 10px;
+    background:linear-gradient(160deg,#FF8FB1 8%,#E02D6D 58%,#B31F55);
+    border:var(--borde);border-bottom:none;
+  }
+  .banda{
+    width:84px;height:24px;margin-top:-2px;
+    background:linear-gradient(180deg,#F6D488,#C9A24B);
+    border:var(--borde);border-radius:5px;
+  }
+  .tubo{
+    width:84px;height:128px;margin-top:-2px;
+    background:linear-gradient(180deg,#4A1230,#2A0A1C);
+    border:var(--borde);border-radius:8px 8px 16px 16px;
+  }
+  .spark{position:absolute;color:var(--rosa);font-size:30px;font-weight:800}
+  .s1{top:10%;left:14%;transform:rotate(-14deg)}
+  .s2{top:24%;right:10%;color:var(--tinta);font-size:22px;transform:rotate(18deg)}
+  .sticker-float{
+    position:absolute;top:6%;right:2%;
+    background:var(--blanco);border:var(--borde);border-radius:999px;
+    padding:8px 16px;font-family:"Baloo 2";font-weight:700;font-size:15px;
+    transform:rotate(6deg);box-shadow:4px 4px 0 var(--lima);
+    white-space:nowrap;
+  }
+
+  /* ---------- catálogo ---------- */
+  .catalogo{max-width:1120px;margin:0 auto;padding:44px 5vw 90px}
+  .catalogo h2{font-size:clamp(30px,3.6vw,42px);margin:0}
+  .cat-sub{margin:6px 0 0;color:rgba(58,15,39,.75);font-weight:600}
+  .grid{
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+    gap:26px;margin-top:32px;
+  }
+  .card{
+    background:var(--blanco);border:var(--borde);border-radius:24px;
+    padding:18px;display:flex;flex-direction:column;
+    transition:transform .18s,box-shadow .18s;
+  }
+  .card:hover{transform:translate(-3px,-3px) rotate(-.5deg);box-shadow:7px 7px 0 var(--rosa)}
+  .swatch{
+    width:100%;aspect-ratio:1/.92;border-radius:46% 46% 44% 44%;
+    border:var(--borde);margin-bottom:16px;
+    position:relative;overflow:hidden;
+  }
+  .swatch img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .card h3{margin:0 0 4px;font-size:21px;line-height:1.2}
+  .desc{margin:0 0 16px;font-size:15px;color:rgba(58,15,39,.72);font-weight:600}
+  .card-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:auto}
+  .precio{
+    background:var(--lima);border:var(--borde);border-radius:999px;
+    padding:4px 13px;font-weight:800;font-size:15px;white-space:nowrap;
+  }
+  .btn-agregar{
+    background:var(--rosa);color:#fff;border:var(--borde);border-radius:999px;
+    padding:9px 20px;font-family:inherit;font-weight:800;font-size:15px;cursor:pointer;
+    transition:background .15s;
+  }
+  .btn-agregar:hover{background:var(--tinta)}
+  .btn-agregar.agregado{background:var(--tinta)}
+
+  /* ---------- estado de disponibilidad ---------- */
+  .estado{
+    display:inline-flex;align-items:center;gap:6px;
+    font-size:12.5px;font-weight:800;margin:0 0 2px;
+  }
+  .estado .punto{width:9px;height:9px;border-radius:50%;border:2px solid var(--tinta);flex:none}
+  .estado.ok .punto{background:var(--lima)}
+  .estado.no{color:#B3123F}
+  .estado.no .punto{background:#B3123F}
+  .card.agotado .swatch{filter:grayscale(.75) opacity(.65)}
+  .card.agotado h3{color:rgba(58,15,39,.55)}
+  .card.agotado .desc{color:rgba(58,15,39,.45)}
+  .btn-agregar:disabled{
+    background:#EBDDE5;color:rgba(58,15,39,.4);
+    border-color:rgba(58,15,39,.3);cursor:not-allowed;
+  }
+
+  /* ---------- pie ---------- */
+  footer{
+    background:var(--tinta);color:var(--fondo);
+    padding:44px 5vw;text-align:center;
+  }
+  footer .logo{color:var(--fondo);font-size:23px}
+  footer .logo::after{background:var(--lima)}
+  footer .logo-img{background:var(--fondo);border-radius:50%;padding:5px;height:40px;width:auto}
+  footer p{margin:10px 0 0;font-weight:600;color:rgba(255,233,241,.85)}
+  footer a{color:var(--lima);font-weight:800;text-decoration:none}
+  footer a:hover{text-decoration:underline}
+
+  /* ---------- carrito ---------- */
+  .overlay{position:fixed;inset:0;background:rgba(58,15,39,.45);z-index:90}
+  .drawer{
+    position:fixed;top:0;right:0;height:100dvh;width:min(420px,100%);
+    background:var(--blanco);border-left:var(--borde);z-index:100;
+    display:flex;flex-direction:column;
+    transform:translateX(105%);
+    transition:transform .3s cubic-bezier(.2,.8,.2,1);
+  }
+  .drawer.abierta{transform:none}
+  .drawer-head{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:18px 22px;border-bottom:var(--borde);
+  }
+  .drawer-head h2{margin:0;font-size:26px}
+  .cerrar{
+    background:var(--blanco);border:var(--borde);border-radius:50%;
+    width:40px;height:40px;font-size:19px;font-weight:800;cursor:pointer;
+    font-family:inherit;color:var(--tinta);
+  }
+  .cerrar:hover{background:var(--lima)}
+  .items{list-style:none;margin:0;padding:0;flex:1;overflow:auto}
+  .item{display:flex;align-items:center;gap:13px;padding:14px 22px;border-bottom:2px dashed rgba(58,15,39,.16)}
+  .mini{width:46px;height:46px;border-radius:50%;border:var(--borde);flex:none;position:relative;overflow:hidden}
+  .mini img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .item-info{min-width:0}
+  .item-info strong{display:block;font-size:15px;line-height:1.3}
+  .item-precio{font-size:14px;font-weight:700;color:var(--rosa)}
+  .stepper{display:flex;align-items:center;gap:8px;margin-left:auto;flex:none}
+  .stepper button{
+    width:31px;height:31px;border-radius:50%;border:var(--borde);
+    background:var(--blanco);font-weight:800;font-size:16px;cursor:pointer;
+    font-family:inherit;color:var(--tinta);line-height:1;
+  }
+  .stepper button:hover{background:var(--lima)}
+  .stepper span{min-width:18px;text-align:center;font-weight:800}
+  .vacio{padding:56px 26px;text-align:center}
+  .vacio .cara{font-size:44px;display:block;margin-bottom:10px}
+  .vacio p{font-weight:700;margin:0 0 18px}
+  .drawer-foot{border-top:var(--borde);padding:18px 22px;background:var(--fondo);display:grid;gap:12px}
+  .total-row{display:flex;justify-content:space-between;align-items:baseline;font-weight:800;font-size:18px}
+  .total-row .monto{font-family:"Baloo 2";font-size:28px}
+  .btn-wsp{
+    background:var(--wsp);color:#fff;border:var(--borde);border-radius:999px;
+    padding:15px;font-family:inherit;font-weight:800;font-size:17px;cursor:pointer;
+    box-shadow:4px 4px 0 var(--tinta);transition:transform .15s,box-shadow .15s;
+    display:flex;align-items:center;justify-content:center;gap:10px;
+  }
+  .btn-wsp:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--tinta)}
+  .drawer-note{margin:0;font-size:14px;font-weight:600;color:rgba(58,15,39,.65);text-align:center}
+
+  :where(a,button):focus-visible{outline:3px solid var(--rosa);outline-offset:3px;border-radius:6px}
+
+  @media (max-width:840px){
+    .hero{grid-template-columns:1fr;padding-top:40px}
+    .hero-art{min-height:340px;order:-1}
+    .topnav{display:none}
+  }
+  /* móvil: dos productos a la par */
+  @media (max-width:700px){
+    .grid{grid-template-columns:repeat(2,1fr);gap:14px}
+    .card{padding:12px;border-radius:18px}
+    .swatch{aspect-ratio:1/.8;margin-bottom:9px}
+    .estado{font-size:11px;margin:0}
+    .card h3{font-size:15.5px}
+    .desc{font-size:12.5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+    .card-foot{flex-direction:column;align-items:stretch;gap:8px}
+    .precio{align-self:flex-start;font-size:13px;padding:3px 10px}
+    .btn-agregar{width:100%;padding:9px 10px;font-size:14.5px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation:none!important;transition:none!important}
+    html{scroll-behavior:auto}
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <a class="logo" href="#"><img class="logo-img" src="img/logo-alieska-glow.png" alt="">Alieska Glow</a>
+  <nav class="topnav" aria-label="Principal">
+    <a href="#catalogo">Catálogo</a>
+    <a href="#contacto">Contacto</a>
+  </nav>
+  <button class="cart-btn" id="btnCarrito" aria-label="Abrir carrito">
+    <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M6 7h12l1.2 13.2a1.5 1.5 0 0 1-1.5 1.8H6.3a1.5 1.5 0 0 1-1.5-1.8L6 7z"/>
+      <path d="M9 10V6a3 3 0 0 1 6 0v4"/>
+    </svg>
+    Carrito
+    <span class="cart-count" id="contador">0</span>
+  </button>
+</header>
+
+<section class="hero">
+  <div>
+    <h1>Maquillaje que se siente <span class="chip">tuyo</span></h1>
+    <p class="hero-sub">Echa un ojo al catálogo, agrega tus favoritos al carrito y envía tu pedido directo a mi WhatsApp. Fácil, bonito y sin vueltas.</p>
+    <div class="hero-cta">
+      <a class="btn btn-primary" href="#catalogo">Ver catálogo</a>
+      <a class="btn btn-ghost" href="https://wa.me/584123398954" target="_blank" rel="noopener">Pedidos por WhatsApp</a>
+    </div>
+  </div>
+  <div class="hero-art" aria-hidden="true">
+    <div class="blob"></div>
+    <div class="spark s1">✦</div>
+    <div class="spark s2">✦</div>
+    <div class="sticker-float">Nuevo ✿ Gloss Miel</div>
+    <div class="lipstick">
+      <div class="bullet"></div>
+      <div class="banda"></div>
+      <div class="tubo"></div>
+    </div>
+  </div>
+</section>
+
+<main id="catalogo" class="catalogo">
+  <h2>El catálogo</h2>
+  <p class="cat-sub">Toca «Agregar» para armar tu pedido. Puedes sumar todo lo que quieras.</p>
+  <div class="grid" id="grid"></div>
+</main>
+
+<footer id="contacto">
+  <a class="logo" href="#"><img class="logo-img" src="img/logo-alieska-glow.png" alt="">Alieska Glow</a>
+  <p>Lunes a sábado · 9 am – 7 pm · <a href="https://wa.me/584123398954" target="_blank" rel="noopener">Escríbeme por WhatsApp</a></p>
+</footer>
+
+<div class="overlay" id="overlay" hidden></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-label="Tu pedido" tabindex="-1">
+  <div class="drawer-head">
+    <h2>Tu pedido</h2>
+    <button class="cerrar" id="btnCerrar" aria-label="Cerrar carrito">✕</button>
+  </div>
+  <ul class="items" id="items"></ul>
+  <div class="drawer-foot">
+    <div class="total-row"><span>Total</span><span class="monto" id="total">$0</span></div>
+    <button class="btn-wsp" id="btnEnviar">
+      <svg width="21" height="21" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2c-1.6 0-3.1-.4-4.4-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.6-6.1c-.3-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1-.2.3-.6.8-.8 1-.1.2-.3.2-.6.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.6-1.2.1-.2 0-.4 0-.5l-.8-1.9c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.2.3-.9.9-.9 2.2s.9 2.5 1.1 2.7c.1.2 1.8 2.8 4.4 3.9 1.6.7 2.3.8 3.1.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.2-.2-.6-.3z"/></svg>
+      Enviar pedido por WhatsApp
+    </button>
+    <p class="drawer-note">Se abrirá WhatsApp con tu pedido ya escrito.</p>
+  </div>
+</aside>
+
+<script>
+  /* Tu número de WhatsApp, con código de país y sin "+" ni espacios. */
+  const NUMERO_WHATSAPP = "584123398954"; // +58 412-3398954
+
+  /* Productos de respaldo: se muestran solo si no se puede leer productos.json
+     (por ejemplo, abriendo el archivo con doble clic, sin servidor). */
+  const PRODUCTOS_BASE = [
+    { id:1, nombre:"Labial mate «Rosa Nube»", detalle:"Cobertura total, fórmula aterciopelada", precio:8500,  disponible:true,  colores:["#FF8FB1","#E02D6D"] },
+    { id:2, nombre:"Gloss «Miel Caliente»",   detalle:"Brillo espejo con aceite de jojoba",      precio:6900,  disponible:true,  colores:["#FFD86F","#FF8A5C"] },
+    { id:3, nombre:"Paleta «Atardecer» 12",   detalle:"Mate y satinados, pigmento alto",         precio:21900, disponible:true,  colores:["#F9C5A0","#B04A8F"] },
+    { id:4, nombre:"Base «Porcelana»",        detalle:"Acabado natural, 8 tonos",                precio:15900, disponible:false, colores:["#F2DCC8","#DBB08C"] },
+    { id:5, nombre:"Rubor «Durazno»",         detalle:"Toque de color para las mejillas",        precio:7500,  disponible:true,  colores:["#FFB39B","#F2695C"] },
+    { id:6, nombre:"Delineador «Trazo Fino»", detalle:"Punta de fieltro, negro intenso 24 h",    precio:5900,  disponible:true,  colores:["#4A4A5A","#101018"] },
+    { id:7, nombre:"Máscara «Pestañazo»",     detalle:"Volumen extremo, sin grumos",             precio:9900,  disponible:false, colores:["#5A5470","#16121F"] },
+    { id:8, nombre:"Set de brochas · 6 pzs",  detalle:"Fibras suaves + neceser de regalo",       precio:14500, disponible:true,  colores:["#E7D4EF","#9C7BB9"] }
+  ];
+
+  /* La lista real se carga de productos.json (la administra el panel admin.html). */
+  let PRODUCTOS = PRODUCTOS_BASE.slice();
+
+  async function iniciar(){
+    try{
+      const r = await fetch("productos.json?_=" + Date.now());
+      if(r.ok){
+        const datos = await r.json();
+        if(Array.isArray(datos)) PRODUCTOS = datos;
+      }
+    }catch(e){ /* sin servidor: quedan los de respaldo */ }
+    renderCatalogo();
+    actualizarContador();
+  }
+
+  let carrito = {};
+  try { carrito = JSON.parse(localStorage.getItem("alieska-carrito")) || {}; } catch(e){ carrito = {}; }
+
+  const fmt = n => "$" + n.toLocaleString("es-MX");
+  const buscar = id => PRODUCTOS.find(p => p.id === +id);
+
+  function guardar(){ try{ localStorage.setItem("alieska-carrito", JSON.stringify(carrito)); }catch(e){} }
+
+  function renderCatalogo(){
+    document.getElementById("grid").innerHTML = PRODUCTOS.map(p => {
+      const agotado = !p.disponible;
+      return `
+      <article class="card${agotado ? " agotado" : ""}">
+        <div class="swatch" style="background:
+          radial-gradient(circle at 30% 24%, rgba(255,255,255,.9), rgba(255,255,255,0) 44%),
+          linear-gradient(135deg, ${p.colores[0]}, ${p.colores[1]})">
+          <img src="img/producto-${p.id}.jpg" alt="Foto de ${p.nombre}" loading="lazy" onerror="this.remove()">
+        </div>
+        <span class="estado ${agotado ? "no" : "ok"}"><span class="punto"></span>${agotado ? "Agotado" : "Disponible"}</span>
+        <h3>${p.nombre}</h3>
+        <p class="desc">${p.detalle}</p>
+        <div class="card-foot">
+          <span class="precio">${fmt(p.precio)}</span>
+          ${agotado
+            ? `<button class="btn-agregar" disabled aria-label="${p.nombre} agotado, no disponible">Agotado</button>`
+            : `<button class="btn-agregar" data-agregar="${p.id}" aria-label="Agregar ${p.nombre} al carrito">Agregar</button>`}
+        </div>
+      </article>`;
+    }).join("");
+  }
+
+  function actualizarContador(){
+    const n = Object.values(carrito).reduce((s,q)=>s+q,0);
+    const c = document.getElementById("contador");
+    c.textContent = n;
+    document.getElementById("btnCarrito").setAttribute("aria-label", `Abrir carrito, ${n} productos`);
+    c.classList.remove("bump"); void c.offsetWidth; c.classList.add("bump");
+  }
+
+  function agregar(id, btn){
+    carrito[id] = (carrito[id] || 0) + 1;
+    guardar(); actualizarContador();
+    if(btn){
+      btn.classList.add("agregado");
+      btn.textContent = "Agregado ✓";
+      setTimeout(()=>{ btn.classList.remove("agregado"); btn.textContent = "Agregar"; }, 950);
+    }
+  }
+
+  const drawer  = document.getElementById("drawer");
+  const overlay = document.getElementById("overlay");
+  const btnCart = document.getElementById("btnCarrito");
+
+  function abrirCarrito(){
+    renderCarrito();
+    drawer.classList.add("abierta");
+    overlay.hidden = false;
+    document.body.style.overflow = "hidden";
+    drawer.focus();
+  }
+  function cerrarCarrito(){
+    drawer.classList.remove("abierta");
+    overlay.hidden = true;
+    document.body.style.overflow = "";
+    btnCart.focus();
+  }
+
+  function renderCarrito(){
+    const ul = document.getElementById("items");
+    const ids = Object.keys(carrito);
+    if(!ids.length){
+      ul.innerHTML = `<li class="vacio">
+        <span class="cara" aria-hidden="true">🛍️</span>
+        <p>Tu carrito está vacío</p>
+        <button class="btn btn-primary" data-accion="ir-catalogo">Ver catálogo</button>
+      </li>`;
+    } else {
+      ul.innerHTML = ids.map(id => {
+        const p = buscar(id), q = carrito[id];
+        return `<li class="item">
+          <span class="mini" style="background:linear-gradient(135deg, ${p.colores[0]}, ${p.colores[1]})">
+            <img src="img/producto-${p.id}.jpg" alt="" loading="lazy" onerror="this.remove()">
+          </span>
+          <div class="item-info">
+            <strong>${p.nombre}</strong>
+            <span class="item-precio">${fmt(p.precio * q)}</span>
+          </div>
+          <div class="stepper">
+            <button data-acc="menos" data-id="${id}" aria-label="Quitar una unidad de ${p.nombre}">−</button>
+            <span>${q}</span>
+            <button data-acc="mas" data-id="${id}" aria-label="Agregar una unidad de ${p.nombre}">+</button>
+          </div>
+        </li>`;
+      }).join("");
+    }
+    const total = ids.reduce((s,id)=> s + buscar(id).precio * carrito[id], 0);
+    document.getElementById("total").textContent = fmt(total);
+    document.getElementById("btnEnviar").disabled = !ids.length;
+    document.getElementById("btnEnviar").style.opacity = ids.length ? "1" : ".5";
+  }
+
+  function enviarWhatsApp(){
+    const ids = Object.keys(carrito);
+    if(!ids.length) return;
+    const lineas = ids.map(id => {
+      const p = buscar(id);
+      return `• ${carrito[id]} × ${p.nombre} — ${fmt(p.precio * carrito[id])}`;
+    });
+    const total = ids.reduce((s,id)=> s + buscar(id).precio * carrito[id], 0);
+    const msg = `¡Hola! ✿ Quiero hacer un pedido:\n\n${lineas.join("\n")}\n\nTotal: ${fmt(total)}\n\n¿Me confirmas disponibilidad y envío? ¡Gracias!`;
+    window.open(`https://wa.me/${NUMERO_WHATSAPP}?text=${encodeURIComponent(msg)}`, "_blank");
+  }
+
+  document.addEventListener("click", e => {
+    const add = e.target.closest("[data-agregar]");
+    if(add){ agregar(+add.dataset.agregar, add); return; }
+
+    const acc = e.target.closest("[data-acc]");
+    if(acc){
+      const id = +acc.dataset.id;
+      if(acc.dataset.acc === "mas") carrito[id] = (carrito[id] || 0) + 1;
+      else { carrito[id] = (carrito[id] || 0) - 1; if(carrito[id] <= 0) delete carrito[id]; }
+      guardar(); actualizarContador(); renderCarrito();
+      return;
+    }
+
+    if(e.target.closest("[data-accion='ir-catalogo']")){
+      cerrarCarrito();
+      document.getElementById("catalogo").scrollIntoView();
+      return;
+    }
+  });
+
+  btnCart.addEventListener("click", abrirCarrito);
+  document.getElementById("btnCerrar").addEventListener("click", cerrarCarrito);
+  overlay.addEventListener("click", cerrarCarrito);
+  document.getElementById("btnEnviar").addEventListener("click", enviarWhatsApp);
+  document.addEventListener("keydown", e => {
+    if(e.key === "Escape" && drawer.classList.contains("abierta")) cerrarCarrito();
+  });
+
+  iniciar();
+</script>
+</body>
+</html>
