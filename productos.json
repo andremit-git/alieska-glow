@@ -34,5 +34,17 @@
     ],
     "precioUsd": 3,
     "precioBs": 3.99
+  },
+  {
+    "id": 12,
+    "nombre": "Paleta de rubor SHAGLAM",
+    "detalle": "",
+    "disponible": true,
+    "colores": [
+      "#FF8FB1",
+      "#E02D6D"
+    ],
+    "precioUsd": 8,
+    "precioBs": 9.99
   }
 ]
