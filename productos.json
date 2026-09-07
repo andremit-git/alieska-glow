@@ -22,5 +22,17 @@
     ],
     "precioUsd": 6,
     "precioBs": 7.5
+  },
+  {
+    "id": 11,
+    "nombre": "Lip gloss",
+    "detalle": "",
+    "disponible": true,
+    "colores": [
+      "#FF8FB1",
+      "#E02D6D"
+    ],
+    "precioUsd": 3,
+    "precioBs": 3.99
   }
 ]
