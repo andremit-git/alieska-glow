@@ -1,11 +1,11 @@
 {
   "colores": {
-    "fondo": "#FFE9F1",
+    "fondo": "#e292fe",
     "tinta": "#3A0F27",
-    "rosa": "#E02D6D",
-    "lima": "#ee719e",
+    "rosa": "#ee719e",
+    "lima": "#f4a4c0",
     "blanco": "#FFFFFF",
-    "wsp": "#d357fe",
+    "wsp": "#be38f3",
     "blob1": "#FFD9E7",
     "blob2": "#FFBFD6"
   },
