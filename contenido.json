@@ -3,16 +3,16 @@
     "fondo": "#FFE9F1",
     "tinta": "#3A0F27",
     "rosa": "#E02D6D",
-    "lima": "#B7E63C",
+    "lima": "#ee719e",
     "blanco": "#FFFFFF",
-    "wsp": "#1FB855",
+    "wsp": "#d357fe",
     "blob1": "#FFD9E7",
     "blob2": "#FFBFD6"
   },
   "marca": {
     "nombre": "Alieska Glow",
     "tituloPestana": "Alieska Glow · Maquillaje que se siente tuyo",
-    "logo": "img/logo-alieska-glow.png"
+    "logo": "img/logo.png"
   },
   "barra": {
     "enlace1Texto": "Catálogo",
