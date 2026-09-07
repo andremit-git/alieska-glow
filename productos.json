@@ -10,5 +10,17 @@
     ],
     "precioUsd": 7,
     "precioBs": 8.5
+  },
+  {
+    "id": 10,
+    "nombre": "Tinta Bene tint",
+    "detalle": "Tinta para labios y mejillas alta pigmentación🍷",
+    "disponible": true,
+    "colores": [
+      "#FF8FB1",
+      "#E02D6D"
+    ],
+    "precioUsd": 6,
+    "precioBs": 7.5
   }
 ]
