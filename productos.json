@@ -1,10 +1,90 @@
 [
-  { "id": 1, "nombre": "Labial mate «Rosa Nube»", "detalle": "Cobertura total, fórmula aterciopelada", "precio": 8500, "disponible": true, "colores": ["#FF8FB1", "#E02D6D"] },
-  { "id": 2, "nombre": "Gloss «Miel Caliente»", "detalle": "Brillo espejo con aceite de jojoba", "precio": 6900, "disponible": true, "colores": ["#FFD86F", "#FF8A5C"] },
-  { "id": 3, "nombre": "Paleta «Atardecer» 12", "detalle": "Mate y satinados, pigmento alto", "precio": 21900, "disponible": true, "colores": ["#F9C5A0", "#B04A8F"] },
-  { "id": 4, "nombre": "Base «Porcelana»", "detalle": "Acabado natural, 8 tonos", "precio": 15900, "disponible": false, "colores": ["#F2DCC8", "#DBB08C"] },
-  { "id": 5, "nombre": "Rubor «Durazno»", "detalle": "Toque de color para las mejillas", "precio": 7500, "disponible": true, "colores": ["#FFB39B", "#F2695C"] },
-  { "id": 6, "nombre": "Delineador «Trazo Fino»", "detalle": "Punta de fieltro, negro intenso 24 h", "precio": 5900, "disponible": true, "colores": ["#4A4A5A", "#101018"] },
-  { "id": 7, "nombre": "Máscara «Pestañazo»", "detalle": "Volumen extremo, sin grumos", "precio": 9900, "disponible": false, "colores": ["#5A5470", "#16121F"] },
-  { "id": 8, "nombre": "Set de brochas · 6 pzs", "detalle": "Fibras suaves + neceser de regalo", "precio": 14500, "disponible": true, "colores": ["#E7D4EF", "#9C7BB9"] }
+  {
+    "id": 1,
+    "nombre": "Labial mate «Rosa Nube»",
+    "detalle": "Cobertura total, fórmula aterciopelada",
+    "precio": 8500,
+    "disponible": true,
+    "colores": [
+      "#FF8FB1",
+      "#E02D6D"
+    ]
+  },
+  {
+    "id": 2,
+    "nombre": "Gloss «Miel Caliente»",
+    "detalle": "Brillo espejo con aceite de jojoba",
+    "precio": 6900,
+    "disponible": true,
+    "colores": [
+      "#FFD86F",
+      "#FF8A5C"
+    ]
+  },
+  {
+    "id": 3,
+    "nombre": "Paleta «Atardecer» 12",
+    "detalle": "Mate y satinados, pigmento alto",
+    "precio": 21900,
+    "disponible": true,
+    "colores": [
+      "#F9C5A0",
+      "#B04A8F"
+    ]
+  },
+  {
+    "id": 4,
+    "nombre": "Base «Porcelana»",
+    "detalle": "Acabado natural, 8 tonos",
+    "precio": 15900,
+    "disponible": false,
+    "colores": [
+      "#F2DCC8",
+      "#DBB08C"
+    ]
+  },
+  {
+    "id": 5,
+    "nombre": "Rubor «Durazno»",
+    "detalle": "Toque de color para las mejillas",
+    "precio": 7500,
+    "disponible": true,
+    "colores": [
+      "#FFB39B",
+      "#F2695C"
+    ]
+  },
+  {
+    "id": 6,
+    "nombre": "Delineador «Trazo Fino»",
+    "detalle": "Punta de fieltro, negro intenso 24 h",
+    "precio": 5900,
+    "disponible": true,
+    "colores": [
+      "#4A4A5A",
+      "#101018"
+    ]
+  },
+  {
+    "id": 7,
+    "nombre": "Máscara «Pestañazo»",
+    "detalle": "Volumen extremo, sin grumos",
+    "precio": 9900,
+    "disponible": false,
+    "colores": [
+      "#5A5470",
+      "#16121F"
+    ]
+  },
+  {
+    "id": 8,
+    "nombre": "Set de brochas · 6 pzs",
+    "detalle": "Fibras suaves + neceser de regalo",
+    "precio": 14500,
+    "disponible": true,
+    "colores": [
+      "#E7D4EF",
+      "#9C7BB9"
+    ]
+  }
 ]
