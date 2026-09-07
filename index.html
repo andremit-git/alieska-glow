@@ -16,6 +16,8 @@
     --lima:#B7E63C;
     --blanco:#FFFFFF;
     --wsp:#1FB855;
+    --blob1:#FFD9E7;
+    --blob2:#FFBFD6;
     --borde:2.5px solid var(--tinta);
   }
   *{box-sizing:border-box}
@@ -90,7 +92,7 @@
   .hero-art{position:relative;min-height:430px}
   .blob{
     position:absolute;inset:0 6% 4% 2%;
-    background:radial-gradient(120% 120% at 22% 16%,#FFD9E7,#FFBFD6);
+    background:radial-gradient(120% 120% at 22% 16%,var(--blob1),var(--blob2));
     border:var(--borde);
     border-radius:58% 42% 55% 45% / 55% 48% 52% 45%;
   }
@@ -99,7 +101,7 @@
     transform:translateX(-50%) rotate(6deg);
     display:flex;flex-direction:column;align-items:center;
     animation:flotar 5s ease-in-out infinite;
-    filter:drop-shadow(9px 10px 0 rgba(58,15,39,.16));
+    filter:drop-shadow(9px 10px 0 color-mix(in srgb,var(--tinta) 16%,transparent));
   }
   @keyframes flotar{
     0%,100%{transform:translateX(-50%) rotate(6deg) translateY(0)}
@@ -131,11 +133,15 @@
     transform:rotate(6deg);box-shadow:4px 4px 0 var(--lima);
     white-space:nowrap;
   }
+  .hero-img{
+    width:100%;border:var(--borde);border-radius:36px;display:block;
+    box-shadow:9px 10px 0 color-mix(in srgb,var(--tinta) 16%,transparent);
+  }
 
   /* ---------- catálogo ---------- */
   .catalogo{max-width:1120px;margin:0 auto;padding:44px 5vw 90px}
   .catalogo h2{font-size:clamp(30px,3.6vw,42px);margin:0}
-  .cat-sub{margin:6px 0 0;color:rgba(58,15,39,.75);font-weight:600}
+  .cat-sub{margin:6px 0 0;color:color-mix(in srgb,var(--tinta) 75%,transparent);font-weight:600}
   .grid{
     display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
     gap:26px;margin-top:32px;
@@ -153,14 +159,14 @@
   }
   .swatch img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
   .card h3{margin:0 0 4px;font-size:21px;line-height:1.2}
-  .desc{margin:0 0 16px;font-size:15px;color:rgba(58,15,39,.72);font-weight:600}
+  .desc{margin:0 0 16px;font-size:15px;color:color-mix(in srgb,var(--tinta) 72%,transparent);font-weight:600}
   .card-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:auto}
   .precio{
     background:var(--lima);border:var(--borde);border-radius:999px;
     padding:4px 13px;font-weight:800;font-size:15px;white-space:nowrap;
     display:inline-flex;flex-direction:column;align-items:flex-start;line-height:1.15;
   }
-  .precio small{font-size:11.5px;font-weight:700;color:rgba(58,15,39,.75)}
+  .precio small{font-size:11.5px;font-weight:700;color:color-mix(in srgb,var(--tinta) 75%,transparent)}
   .btn-agregar{
     background:var(--rosa);color:#fff;border:var(--borde);border-radius:999px;
     padding:9px 20px;font-family:inherit;font-weight:800;font-size:15px;cursor:pointer;
@@ -194,12 +200,12 @@
   footer .logo{color:var(--fondo);font-size:23px}
   footer .logo::after{background:var(--lima)}
   footer .logo-img{background:var(--fondo);border-radius:50%;padding:5px;height:40px;width:auto}
-  footer p{margin:10px 0 0;font-weight:600;color:rgba(255,233,241,.85)}
+  footer p{margin:10px 0 0;font-weight:600;color:color-mix(in srgb,var(--fondo) 85%,transparent)}
   footer a{color:var(--lima);font-weight:800;text-decoration:none}
   footer a:hover{text-decoration:underline}
 
   /* ---------- carrito ---------- */
-  .overlay{position:fixed;inset:0;background:rgba(58,15,39,.45);z-index:90}
+  .overlay{position:fixed;inset:0;background:color-mix(in srgb,var(--tinta) 45%,transparent);z-index:90}
   .drawer{
     position:fixed;top:0;right:0;height:100dvh;width:min(420px,100%);
     background:var(--blanco);border-left:var(--borde);z-index:100;
@@ -220,7 +226,7 @@
   }
   .cerrar:hover{background:var(--lima)}
   .items{list-style:none;margin:0;padding:0;flex:1;overflow:auto}
-  .item{display:flex;align-items:center;gap:13px;padding:14px 22px;border-bottom:2px dashed rgba(58,15,39,.16)}
+  .item{display:flex;align-items:center;gap:13px;padding:14px 22px;border-bottom:2px dashed color-mix(in srgb,var(--tinta) 16%,transparent)}
   .mini{width:46px;height:46px;border-radius:50%;border:var(--borde);flex:none;position:relative;overflow:hidden}
   .mini img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
   .item-info{min-width:0}
@@ -247,7 +253,7 @@
     display:flex;align-items:center;justify-content:center;gap:10px;
   }
   .btn-wsp:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--tinta)}
-  .drawer-note{margin:0;font-size:14px;font-weight:600;color:rgba(58,15,39,.65);text-align:center}
+  .drawer-note{margin:0;font-size:14px;font-weight:600;color:color-mix(in srgb,var(--tinta) 65%,transparent);text-align:center}
 
   :where(a,button):focus-visible{outline:3px solid var(--rosa);outline-offset:3px;border-radius:6px}
 
@@ -277,35 +283,35 @@
 <body>
 
 <header class="topbar">
-  <a class="logo" href="#"><img class="logo-img" src="img/logo-alieska-glow.png" alt="">Alieska Glow</a>
+  <a class="logo" href="#"><img class="logo-img" id="logoArriba" src="img/logo-alieska-glow.png" alt=""><span id="marcaArriba">Alieska Glow</span></a>
   <nav class="topnav" aria-label="Principal">
-    <a href="#catalogo">Catálogo</a>
-    <a href="#contacto">Contacto</a>
+    <a href="#catalogo" id="navEnlace1">Catálogo</a>
+    <a href="#contacto" id="navEnlace2">Contacto</a>
   </nav>
   <button class="cart-btn" id="btnCarrito" aria-label="Abrir carrito">
     <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
       <path d="M6 7h12l1.2 13.2a1.5 1.5 0 0 1-1.5 1.8H6.3a1.5 1.5 0 0 1-1.5-1.8L6 7z"/>
       <path d="M9 10V6a3 3 0 0 1 6 0v4"/>
     </svg>
-    Carrito
+    <span id="textoCarrito">Carrito</span>
     <span class="cart-count" id="contador">0</span>
   </button>
 </header>
 
 <section class="hero">
   <div>
-    <h1>Maquillaje que se siente <span class="chip">tuyo</span></h1>
-    <p class="hero-sub">Echa un ojo al catálogo, agrega tus favoritos al carrito y envía tu pedido directo a mi WhatsApp. Fácil, bonito y sin vueltas.</p>
+    <h1><span id="heroTitulo">Maquillaje que se siente</span> <span class="chip" id="heroChip">tuyo</span></h1>
+    <p class="hero-sub" id="heroSub">Echa un ojo al catálogo, agrega tus favoritos al carrito y envía tu pedido directo a mi WhatsApp. Fácil, bonito y sin vueltas.</p>
     <div class="hero-cta">
-      <a class="btn btn-primary" href="#catalogo">Ver catálogo</a>
-      <a class="btn btn-ghost" href="https://wa.me/584123398954" target="_blank" rel="noopener">Pedidos por WhatsApp</a>
+      <a class="btn btn-primary" href="#catalogo" id="heroBoton1">Ver catálogo</a>
+      <a class="btn btn-ghost" href="https://wa.me/584123398954" target="_blank" rel="noopener" id="heroBotonWsp">Pedidos por WhatsApp</a>
     </div>
   </div>
-  <div class="hero-art" aria-hidden="true">
+  <div class="hero-art" id="heroArt" aria-hidden="true">
     <div class="blob"></div>
     <div class="spark s1">✦</div>
     <div class="spark s2">✦</div>
-    <div class="sticker-float">Nuevo ✿ Gloss Miel</div>
+    <div class="sticker-float" id="sticker">Nuevo ✿ Gloss Miel</div>
     <div class="lipstick">
       <div class="bullet"></div>
       <div class="banda"></div>
@@ -315,36 +321,167 @@
 </section>
 
 <main id="catalogo" class="catalogo">
-  <h2>El catálogo</h2>
-  <p class="cat-sub">Toca «Agregar» para armar tu pedido. Puedes sumar todo lo que quieras.</p>
+  <h2 id="catalogoTitulo">El catálogo</h2>
+  <p class="cat-sub" id="catalogoSub">Toca «Agregar» para armar tu pedido. Puedes sumar todo lo que quieras.</p>
   <div class="grid" id="grid"></div>
 </main>
 
 <footer id="contacto">
-  <a class="logo" href="#"><img class="logo-img" src="img/logo-alieska-glow.png" alt="">Alieska Glow</a>
-  <p>Lunes a sábado · 9 am – 7 pm · <a href="https://wa.me/584123398954" target="_blank" rel="noopener">Escríbeme por WhatsApp</a></p>
+  <a class="logo" href="#"><img class="logo-img" id="logoAbajo" src="img/logo-alieska-glow.png" alt=""><span id="marcaAbajo">Alieska Glow</span></a>
+  <p><span id="pieTexto">Lunes a sábado · 9 am – 7 pm ·</span> <a id="pieEnlace" href="https://wa.me/584123398954" target="_blank" rel="noopener">Escríbeme por WhatsApp</a></p>
 </footer>
 
 <div class="overlay" id="overlay" hidden></div>
 <aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-label="Tu pedido" tabindex="-1">
   <div class="drawer-head">
-    <h2>Tu pedido</h2>
+    <h2 id="drawerTitulo">Tu pedido</h2>
     <button class="cerrar" id="btnCerrar" aria-label="Cerrar carrito">✕</button>
   </div>
   <ul class="items" id="items"></ul>
   <div class="drawer-foot">
-    <div class="total-row"><span>Total</span><span class="monto" id="total">$0</span></div>
+    <div class="total-row"><span id="totalEtiqueta">Total</span><span class="monto" id="total">$0</span></div>
     <button class="btn-wsp" id="btnEnviar">
       <svg width="21" height="21" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2c-1.6 0-3.1-.4-4.4-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.6-6.1c-.3-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1-.2.3-.6.8-.8 1-.1.2-.3.2-.6.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.6-1.2.1-.2 0-.4 0-.5l-.8-1.9c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.2.3-.9.9-.9 2.2s.9 2.5 1.1 2.7c.1.2 1.8 2.8 4.4 3.9 1.6.7 2.3.8 3.1.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.2-.2-.6-.3z"/></svg>
-      Enviar pedido por WhatsApp
+      <span id="btnEnviarTexto">Enviar pedido por WhatsApp</span>
     </button>
-    <p class="drawer-note">Se abrirá WhatsApp con tu pedido ya escrito.</p>
+    <p class="drawer-note" id="drawerNota">Se abrirá WhatsApp con tu pedido ya escrito.</p>
   </div>
 </aside>
 
 <script>
-  /* Tu número de WhatsApp, con código de país y sin "+" ni espacios. */
-  const NUMERO_WHATSAPP = "584123398954"; // +58 412-3398954
+  /* ============================================================
+     Contenido editable de la página: colores, textos, logo, imagen
+     del héroe y WhatsApp. Lo real vive en contenido.json (lo administra
+     el panel admin.html); estos valores son el respaldo para cuando no
+     se puede leer ese archivo (por ejemplo, abriendo con doble clic).
+     ============================================================ */
+  const CONTENIDO_BASE = {
+    colores: {
+      fondo:  "#FFE9F1",
+      tinta:  "#3A0F27",
+      rosa:   "#E02D6D",
+      lima:   "#B7E63C",
+      blanco: "#FFFFFF",
+      wsp:    "#1FB855",
+      blob1:  "#FFD9E7",
+      blob2:  "#FFBFD6"
+    },
+    marca: {
+      nombre: "Alieska Glow",
+      tituloPestana: "Alieska Glow · Maquillaje que se siente tuyo",
+      logo: "img/logo-alieska-glow.png"
+    },
+    barra: {
+      enlace1Texto: "Catálogo",
+      enlace1Url: "#catalogo",
+      enlace2Texto: "Contacto",
+      enlace2Url: "#contacto",
+      textoCarrito: "Carrito"
+    },
+    hero: {
+      titulo: "Maquillaje que se siente",
+      palabraChip: "tuyo",
+      subtitulo: "Echa un ojo al catálogo, agrega tus favoritos al carrito y envía tu pedido directo a mi WhatsApp. Fácil, bonito y sin vueltas.",
+      botonPrincipalTexto: "Ver catálogo",
+      botonPrincipalUrl: "#catalogo",
+      botonWhatsappTexto: "Pedidos por WhatsApp",
+      sticker: "Nuevo ✿ Gloss Miel",
+      imagen: ""
+    },
+    catalogo: {
+      titulo: "El catálogo",
+      subtitulo: "Toca «Agregar» para armar tu pedido. Puedes sumar todo lo que quieras."
+    },
+    pie: {
+      texto: "Lunes a sábado · 9 am – 7 pm ·",
+      enlaceTexto: "Escríbeme por WhatsApp",
+      enlaceUrl: "https://wa.me/584123398954"
+    },
+    carrito: {
+      titulo: "Tu pedido",
+      total: "Total",
+      botonEnviar: "Enviar pedido por WhatsApp",
+      nota: "Se abrirá WhatsApp con tu pedido ya escrito.",
+      vacio: "Tu carrito está vacío",
+      botonVerCatalogo: "Ver catálogo",
+      textoAgregar: "Agregar",
+      textoAgregado: "Agregado ✓",
+      textoDisponible: "Disponible",
+      textoAgotado: "Agotado"
+    },
+    whatsapp: {
+      numero: "584123398954",
+      mensajePedido: "¡Hola! ✿ Quiero hacer un pedido:\n\n{productos}\n\nTotal: {total}\n\n¿Me confirmas disponibilidad y envío? ¡Gracias!"
+    }
+  };
+
+  /* Combina lo guardado con los valores base: si contenido.json no trae
+     una sección o un campo, se usa el de aquí. */
+  function combinarContenido(base, extra){
+    const r = { ...base };
+    for(const k of Object.keys(extra || {})){
+      const v = extra[k];
+      r[k] = (v && typeof v === "object" && !Array.isArray(v) && r[k] && typeof r[k] === "object" && !Array.isArray(r[k]))
+        ? combinarContenido(r[k], v)
+        : v;
+    }
+    return r;
+  }
+
+  let CONTENIDO = combinarContenido(CONTENIDO_BASE, null);
+
+  const ARTE_HERO_BASE = document.getElementById("heroArt").innerHTML;
+  const setTexto = (id, texto) => { const el = document.getElementById(id); if(el) el.textContent = texto ?? ""; };
+
+  /* Aplica colores, textos, logo, imagen del héroe y número de WhatsApp. */
+  function aplicarContenido(c){
+    const raiz = document.documentElement.style;
+    for(const k of Object.keys(c.colores || {})) raiz.setProperty("--" + k, c.colores[k]);
+
+    document.title = c.marca.tituloPestana || c.marca.nombre;
+    setTexto("marcaArriba", c.marca.nombre);
+    setTexto("marcaAbajo",  c.marca.nombre);
+    for(const id of ["logoArriba", "logoAbajo"]){
+      const img = document.getElementById(id);
+      if(c.marca.logo){ img.style.display = ""; img.src = c.marca.logo; }
+      else img.style.display = "none";
+    }
+
+    setTexto("navEnlace1", c.barra.enlace1Texto);
+    document.getElementById("navEnlace1").href = c.barra.enlace1Url || "#";
+    setTexto("navEnlace2", c.barra.enlace2Texto);
+    document.getElementById("navEnlace2").href = c.barra.enlace2Url || "#";
+    setTexto("textoCarrito", c.barra.textoCarrito);
+    document.getElementById("btnCarrito").setAttribute("aria-label", "Abrir " + (c.barra.textoCarrito || "carrito"));
+
+    setTexto("heroTitulo", c.hero.titulo);
+    const chip = document.getElementById("heroChip");
+    chip.textContent = c.hero.palabraChip || "";
+    chip.style.display = c.hero.palabraChip ? "" : "none";
+    setTexto("heroSub", c.hero.subtitulo);
+    setTexto("heroBoton1", c.hero.botonPrincipalTexto);
+    document.getElementById("heroBoton1").href = c.hero.botonPrincipalUrl || "#";
+    setTexto("heroBotonWsp", c.hero.botonWhatsappTexto);
+    document.getElementById("heroBotonWsp").href = "https://wa.me/" + String(c.whatsapp.numero).replace(/\D/g, "");
+    const sticker = document.getElementById("sticker");
+    sticker.textContent = c.hero.sticker || "";
+    sticker.style.display = c.hero.sticker ? "" : "none";
+
+    /* Si hay imagen del héroe se muestra ella; si no, el dibujo del labial. */
+    document.getElementById("heroArt").innerHTML =
+      c.hero.imagen ? '<img class="hero-img" src="' + c.hero.imagen + '" alt="">' : ARTE_HERO_BASE;
+
+    setTexto("catalogoTitulo", c.catalogo.titulo);
+    setTexto("catalogoSub", c.catalogo.subtitulo);
+    setTexto("pieTexto", c.pie.texto);
+    setTexto("pieEnlace", c.pie.enlaceTexto);
+    document.getElementById("pieEnlace").href = c.pie.enlaceUrl || "#";
+
+    setTexto("drawerTitulo", c.carrito.titulo);
+    setTexto("totalEtiqueta", c.carrito.total);
+    setTexto("btnEnviarTexto", c.carrito.botonEnviar);
+    setTexto("drawerNota", c.carrito.nota);
+  }
 
   /* Productos de respaldo: se muestran solo si no se puede leer productos.json
      (por ejemplo, abriendo el archivo con doble clic, sin servidor). */
@@ -371,6 +508,17 @@
   let PRODUCTOS = PRODUCTOS_BASE.map(p => normalizarProducto({ ...p }));
 
   async function iniciar(){
+    try{
+      const r = await fetch("contenido.json?_=" + Date.now());
+      if(r.ok){
+        const datos = await r.json();
+        if(datos && typeof datos === "object" && !Array.isArray(datos)){
+          CONTENIDO = combinarContenido(CONTENIDO_BASE, datos);
+        }
+      }
+    }catch(e){ /* sin servidor: queda el contenido de respaldo */ }
+    aplicarContenido(CONTENIDO);
+
     try{
       const r = await fetch("productos.json?_=" + Date.now());
       if(r.ok){
@@ -439,14 +587,14 @@
           linear-gradient(135deg, ${p.colores[0]}, ${p.colores[1]})">
           <img src="img/producto-${p.id}.jpg" alt="Foto de ${p.nombre}" loading="lazy" onerror="this.remove()">
         </div>
-        <span class="estado ${agotado ? "no" : "ok"}"><span class="punto"></span>${agotado ? "Agotado" : "Disponible"}</span>
+        <span class="estado ${agotado ? "no" : "ok"}"><span class="punto"></span>${agotado ? CONTENIDO.carrito.textoAgotado : CONTENIDO.carrito.textoDisponible}</span>
         <h3>${p.nombre}</h3>
         <p class="desc">${p.detalle}</p>
         <div class="card-foot">
           ${precios ? `<span class="precio">${precios}</span>` : ""}
           ${agotado
-            ? `<button class="btn-agregar" disabled aria-label="${p.nombre} agotado, no disponible">Agotado</button>`
-            : `<button class="btn-agregar" data-agregar="${p.id}" aria-label="Agregar ${p.nombre} al carrito">Agregar</button>`}
+            ? `<button class="btn-agregar" disabled aria-label="${p.nombre} ${CONTENIDO.carrito.textoAgotado}, no disponible">${CONTENIDO.carrito.textoAgotado}</button>`
+            : `<button class="btn-agregar" data-agregar="${p.id}" aria-label="Agregar ${p.nombre} al carrito">${CONTENIDO.carrito.textoAgregar}</button>`}
         </div>
       </article>`;
     }).join("");
@@ -456,7 +604,7 @@
     const n = Object.values(carrito).reduce((s,q)=>s+q,0);
     const c = document.getElementById("contador");
     c.textContent = n;
-    document.getElementById("btnCarrito").setAttribute("aria-label", `Abrir carrito, ${n} productos`);
+    document.getElementById("btnCarrito").setAttribute("aria-label", `Abrir ${CONTENIDO.barra.textoCarrito || "carrito"}, ${n} productos`);
     c.classList.remove("bump"); void c.offsetWidth; c.classList.add("bump");
   }
 
@@ -465,8 +613,8 @@
     guardar(); actualizarContador();
     if(btn){
       btn.classList.add("agregado");
-      btn.textContent = "Agregado ✓";
-      setTimeout(()=>{ btn.classList.remove("agregado"); btn.textContent = "Agregar"; }, 950);
+      btn.textContent = CONTENIDO.carrito.textoAgregado;
+      setTimeout(()=>{ btn.classList.remove("agregado"); btn.textContent = CONTENIDO.carrito.textoAgregar; }, 950);
     }
   }
 
@@ -494,8 +642,8 @@
     if(!ids.length){
       ul.innerHTML = `<li class="vacio">
         <span class="cara" aria-hidden="true">🛍️</span>
-        <p>Tu carrito está vacío</p>
-        <button class="btn btn-primary" data-accion="ir-catalogo">Ver catálogo</button>
+        <p>${CONTENIDO.carrito.vacio}</p>
+        <button class="btn btn-primary" data-accion="ir-catalogo">${CONTENIDO.carrito.botonVerCatalogo}</button>
       </li>`;
     } else {
       ul.innerHTML = ids.map(id => {
@@ -528,8 +676,11 @@
       const p = buscar(id);
       return `• ${carrito[id]} × ${p.nombre} — ${preciosTexto(p, carrito[id])}`;
     });
-    const msg = `¡Hola! ✿ Quiero hacer un pedido:\n\n${lineas.join("\n")}\n\nTotal: ${totalesTexto()}\n\n¿Me confirmas disponibilidad y envío? ¡Gracias!`;
-    window.open(`https://wa.me/${NUMERO_WHATSAPP}?text=${encodeURIComponent(msg)}`, "_blank");
+    const plantilla = CONTENIDO.whatsapp.mensajePedido || "¡Hola! Quiero hacer un pedido:\n\n{productos}\n\nTotal: {total}";
+    const msg = plantilla
+      .split("{productos}").join(lineas.join("\n"))
+      .split("{total}").join(totalesTexto());
+    window.open(`https://wa.me/${CONTENIDO.whatsapp.numero.replace(/\D/g, "")}?text=${encodeURIComponent(msg)}`, "_blank");
   }
 
   document.addEventListener("click", e => {

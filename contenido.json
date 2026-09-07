@@ -1,0 +1,59 @@
+{
+  "colores": {
+    "fondo": "#FFE9F1",
+    "tinta": "#3A0F27",
+    "rosa": "#E02D6D",
+    "lima": "#B7E63C",
+    "blanco": "#FFFFFF",
+    "wsp": "#1FB855",
+    "blob1": "#FFD9E7",
+    "blob2": "#FFBFD6"
+  },
+  "marca": {
+    "nombre": "Alieska Glow",
+    "tituloPestana": "Alieska Glow · Maquillaje que se siente tuyo",
+    "logo": "img/logo-alieska-glow.png"
+  },
+  "barra": {
+    "enlace1Texto": "Catálogo",
+    "enlace1Url": "#catalogo",
+    "enlace2Texto": "Contacto",
+    "enlace2Url": "#contacto",
+    "textoCarrito": "Carrito"
+  },
+  "hero": {
+    "titulo": "Maquillaje que se siente",
+    "palabraChip": "tuyo",
+    "subtitulo": "Echa un ojo al catálogo, agrega tus favoritos al carrito y envía tu pedido directo a mi WhatsApp. Fácil, bonito y sin vueltas.",
+    "botonPrincipalTexto": "Ver catálogo",
+    "botonPrincipalUrl": "#catalogo",
+    "botonWhatsappTexto": "Pedidos por WhatsApp",
+    "sticker": "Nuevo ✿ Gloss Miel",
+    "imagen": ""
+  },
+  "catalogo": {
+    "titulo": "El catálogo",
+    "subtitulo": "Toca «Agregar» para armar tu pedido. Puedes sumar todo lo que quieras."
+  },
+  "pie": {
+    "texto": "Lunes a sábado · 9 am – 7 pm ·",
+    "enlaceTexto": "Escríbeme por WhatsApp",
+    "enlaceUrl": "https://wa.me/584123398954"
+  },
+  "carrito": {
+    "titulo": "Tu pedido",
+    "total": "Total",
+    "botonEnviar": "Enviar pedido por WhatsApp",
+    "nota": "Se abrirá WhatsApp con tu pedido ya escrito.",
+    "vacio": "Tu carrito está vacío",
+    "botonVerCatalogo": "Ver catálogo",
+    "textoAgregar": "Agregar",
+    "textoAgregado": "Agregado ✓",
+    "textoDisponible": "Disponible",
+    "textoAgotado": "Agotado"
+  },
+  "whatsapp": {
+    "numero": "584123398954",
+    "mensajePedido": "¡Hola! ✿ Quiero hacer un pedido:\n\n{productos}\n\nTotal: {total}\n\n¿Me confirmas disponibilidad y envío? ¡Gracias!"
+  }
+}

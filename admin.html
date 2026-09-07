@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Alieska Glow · Panel de productos</title>
+<title>Alieska Glow · Panel de administración</title>
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -110,6 +110,30 @@
   .editor-foto .mini{width:96px;height:96px}
   input[type=file]{font-weight:700;font-size:14px;max-width:260px}
 
+  /* ---------- pestañas ---------- */
+  .tabs{display:flex;gap:10px;flex-wrap:wrap;margin:22px 0 2px}
+  .tab{
+    display:inline-block;padding:10px 20px;border-radius:999px;
+    font-family:inherit;font-weight:800;font-size:15.5px;cursor:pointer;
+    border:var(--borde);background:var(--blanco);color:var(--tinta);
+  }
+  .tab.activa{background:var(--rosa);color:#fff;box-shadow:3px 3px 0 var(--tinta)}
+
+  /* ---------- editor de contenido ---------- */
+  .tarjeta-seccion{margin-top:22px}
+  .campo-color{display:flex;align-items:center;gap:10px;margin-top:5px}
+  .campo-color input[type=color]{
+    width:52px;height:40px;padding:3px;border:2.5px solid var(--tinta);
+    border-radius:12px;background:#fff;cursor:pointer;flex:none;
+  }
+  .campo-color input[type=text]{width:130px;font-weight:700}
+  .vista-imagen{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-top:4px}
+  .vista-imagen .mini{width:84px;height:84px;border-radius:16px}
+  .vista-imagen .mini.vacia{
+    background:repeating-linear-gradient(45deg,#F6E3EB,#F6E3EB 10px,#FFF 10px,#FFF 20px);
+    display:grid;place-items:center;font-size:26px;
+  }
+
   :where(a,button):focus-visible{outline:3px solid var(--rosa);outline-offset:3px;border-radius:8px}
   @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
@@ -117,7 +141,7 @@
 <body>
 
 <header class="topbar">
-  <a class="logo" href="index.html"><img class="logo-img" src="img/logo-alieska-glow.png" alt="">Panel de productos</a>
+  <a class="logo" href="index.html"><img class="logo-img" src="img/logo-alieska-glow.png" alt="">Panel de administración</a>
   <a class="btn btn-mini" href="index.html">Ver tienda</a>
 </header>
 
@@ -158,7 +182,19 @@
     </div>
     <p class="nota" id="mensaje-estado" style="margin:4px 0 0"></p>
 
-    <ul class="lista" id="lista"></ul>
+    <div class="tabs" role="tablist">
+      <button class="tab activa" data-tab="productos" type="button">Productos</button>
+      <button class="tab" data-tab="contenido" type="button">Colores y textos</button>
+    </div>
+
+    <section id="panel-productos">
+      <ul class="lista" id="lista"></ul>
+    </section>
+
+    <section id="panel-contenido" class="oculto">
+      <p class="nota" style="margin:14px 0 0">Todo lo de la tienda que no son los productos: colores, textos, logo, imagen principal y WhatsApp. Se publica con el mismo botón «Guardar cambios en la web».</p>
+      <div id="editor-contenido"></div>
+    </section>
 
     <!-- ====== editor de producto ====== -->
     <div class="tarjeta oculto" id="editor" style="margin-top:22px">
@@ -213,12 +249,164 @@
     { id:8, nombre:"Set de brochas · 6 pzs",  detalle:"Fibras suaves + neceser de regalo",       precio:14500, disponible:true,  colores:["#E7D4EF","#9C7BB9"] }
   ];
 
+  /* ================= contenido de la tienda (respaldo base) ================= */
+  /* Igual que CONTENIDO_BASE de index.html: si contenido.json no existe o le
+     falta un campo, se usa el valor de aquí. */
+  const CONTENIDO_BASE = {
+    colores: {
+      fondo:  "#FFE9F1",
+      tinta:  "#3A0F27",
+      rosa:   "#E02D6D",
+      lima:   "#B7E63C",
+      blanco: "#FFFFFF",
+      wsp:    "#1FB855",
+      blob1:  "#FFD9E7",
+      blob2:  "#FFBFD6"
+    },
+    marca: {
+      nombre: "Alieska Glow",
+      tituloPestana: "Alieska Glow · Maquillaje que se siente tuyo",
+      logo: "img/logo-alieska-glow.png"
+    },
+    barra: {
+      enlace1Texto: "Catálogo",
+      enlace1Url: "#catalogo",
+      enlace2Texto: "Contacto",
+      enlace2Url: "#contacto",
+      textoCarrito: "Carrito"
+    },
+    hero: {
+      titulo: "Maquillaje que se siente",
+      palabraChip: "tuyo",
+      subtitulo: "Echa un ojo al catálogo, agrega tus favoritos al carrito y envía tu pedido directo a mi WhatsApp. Fácil, bonito y sin vueltas.",
+      botonPrincipalTexto: "Ver catálogo",
+      botonPrincipalUrl: "#catalogo",
+      botonWhatsappTexto: "Pedidos por WhatsApp",
+      sticker: "Nuevo ✿ Gloss Miel",
+      imagen: ""
+    },
+    catalogo: {
+      titulo: "El catálogo",
+      subtitulo: "Toca «Agregar» para armar tu pedido. Puedes sumar todo lo que quieras."
+    },
+    pie: {
+      texto: "Lunes a sábado · 9 am – 7 pm ·",
+      enlaceTexto: "Escríbeme por WhatsApp",
+      enlaceUrl: "https://wa.me/584123398954"
+    },
+    carrito: {
+      titulo: "Tu pedido",
+      total: "Total",
+      botonEnviar: "Enviar pedido por WhatsApp",
+      nota: "Se abrirá WhatsApp con tu pedido ya escrito.",
+      vacio: "Tu carrito está vacío",
+      botonVerCatalogo: "Ver catálogo",
+      textoAgregar: "Agregar",
+      textoAgregado: "Agregado ✓",
+      textoDisponible: "Disponible",
+      textoAgotado: "Agotado"
+    },
+    whatsapp: {
+      numero: "584123398954",
+      mensajePedido: "¡Hola! ✿ Quiero hacer un pedido:\n\n{productos}\n\nTotal: {total}\n\n¿Me confirmas disponibilidad y envío? ¡Gracias!"
+    }
+  };
+
+  /* Cada sección del editor: campos con su ruta dentro de contenido.json. */
+  const ESQUEMA_CONTENIDO = [
+    { titulo: "Colores", nota: "Toca el cuadrito para elegir un color o pega el código en la casilla (ej. #E02D6D, con almohadilla).", campos: [
+      { clave: "colores.fondo",  tipo: "color", etiqueta: "Fondo de la página" },
+      { clave: "colores.tinta",  tipo: "color", etiqueta: "Tinta (textos y bordes)" },
+      { clave: "colores.rosa",   tipo: "color", etiqueta: "Color principal (botones y acentos)" },
+      { clave: "colores.lima",   tipo: "color", etiqueta: "Color destacado (etiquetas de precio)" },
+      { clave: "colores.blanco", tipo: "color", etiqueta: "Tarjetas y paneles" },
+      { clave: "colores.wsp",    tipo: "color", etiqueta: "Botón de WhatsApp" },
+      { clave: "colores.blob1",  tipo: "color", etiqueta: "Mancha del héroe · color 1" },
+      { clave: "colores.blob2",  tipo: "color", etiqueta: "Mancha del héroe · color 2" }
+    ]},
+    { titulo: "Marca", campos: [
+      { clave: "marca.nombre",        tipo: "text", etiqueta: "Nombre de la tienda" },
+      { clave: "marca.tituloPestana", tipo: "text", etiqueta: "Título de la pestaña del navegador" },
+      { clave: "marca.logo", tipo: "imagen", etiqueta: "Logo", destino: "img/logo.png", formato: "png",
+        nota: "Se ajusta solo. Un PNG con fondo transparente queda perfecto." }
+    ]},
+    { titulo: "Barra superior", campos: [
+      { clave: "barra.enlace1Texto", tipo: "text", etiqueta: "Primer enlace · texto" },
+      { clave: "barra.enlace1Url",   tipo: "text", etiqueta: "Primer enlace · destino",
+        nota: "«#catalogo» va al catálogo y «#contacto» al pie; también sirve una dirección web completa." },
+      { clave: "barra.enlace2Texto", tipo: "text", etiqueta: "Segundo enlace · texto" },
+      { clave: "barra.enlace2Url",   tipo: "text", etiqueta: "Segundo enlace · destino" },
+      { clave: "barra.textoCarrito", tipo: "text", etiqueta: "Texto del botón del carrito" }
+    ]},
+    { titulo: "Sección principal (héroe)", campos: [
+      { clave: "hero.titulo",      tipo: "text", etiqueta: "Frase principal" },
+      { clave: "hero.palabraChip", tipo: "text", etiqueta: "Palabra destacada (el recuadro)",
+        nota: "Si la dejas vacía, no se muestra el recuadro." },
+      { clave: "hero.subtitulo", tipo: "textarea", etiqueta: "Texto de abajo" },
+      { clave: "hero.botonPrincipalTexto", tipo: "text", etiqueta: "Botón principal · texto" },
+      { clave: "hero.botonPrincipalUrl",   tipo: "text", etiqueta: "Botón principal · destino" },
+      { clave: "hero.botonWhatsappTexto",  tipo: "text", etiqueta: "Botón de WhatsApp · texto (el destino sale de la sección WhatsApp)" },
+      { clave: "hero.sticker", tipo: "text", etiqueta: "Pegatina flotante",
+        nota: "Si la dejas vacía, no se muestra." },
+      { clave: "hero.imagen", tipo: "imagen", etiqueta: "Imagen del héroe (opcional)", destino: "img/hero.jpg", formato: "jpg", quitable: true,
+        nota: "Si subes una foto, reemplaza el dibujo del labial. Quita la imagen para volver al dibujo." }
+    ]},
+    { titulo: "Encabezado del catálogo", campos: [
+      { clave: "catalogo.titulo",    tipo: "text",     etiqueta: "Título" },
+      { clave: "catalogo.subtitulo", tipo: "textarea", etiqueta: "Texto de abajo" }
+    ]},
+    { titulo: "Pie de página", campos: [
+      { clave: "pie.texto",       tipo: "text", etiqueta: "Texto (horarios, etc.)" },
+      { clave: "pie.enlaceTexto", tipo: "text", etiqueta: "Enlace · texto" },
+      { clave: "pie.enlaceUrl",   tipo: "text", etiqueta: "Enlace · destino" }
+    ]},
+    { titulo: "Carrito y etiquetas", campos: [
+      { clave: "carrito.titulo",           tipo: "text", etiqueta: "Título del carrito" },
+      { clave: "carrito.total",            tipo: "text", etiqueta: "Palabra «Total»" },
+      { clave: "carrito.botonEnviar",      tipo: "text", etiqueta: "Botón de envío · texto" },
+      { clave: "carrito.nota",             tipo: "text", etiqueta: "Nota bajo el botón de envío" },
+      { clave: "carrito.vacio",            tipo: "text", etiqueta: "Mensaje de carrito vacío" },
+      { clave: "carrito.botonVerCatalogo", tipo: "text", etiqueta: "Botón «Ver catálogo» del carrito vacío" },
+      { clave: "carrito.textoAgregar",     tipo: "text", etiqueta: "Botón de las tarjetas · «Agregar»" },
+      { clave: "carrito.textoAgregado",    tipo: "text", etiqueta: "Botón de las tarjetas · confirmación al agregar" },
+      { clave: "carrito.textoDisponible",  tipo: "text", etiqueta: "Etiqueta de producto disponible" },
+      { clave: "carrito.textoAgotado",     tipo: "text", etiqueta: "Etiqueta y botón de producto agotado" }
+    ]},
+    { titulo: "WhatsApp", campos: [
+      { clave: "whatsapp.numero", tipo: "text", inputmode: "tel", etiqueta: "Número",
+        nota: "Con código de país, sin «+» ni espacios. Venezuela: 58 + celular, ej. 584123398954. Lo usan el botón del héroe, el pie y el envío del pedido." },
+      { clave: "whatsapp.mensajePedido", tipo: "textarea", etiqueta: "Mensaje del pedido",
+        nota: "Escribe {productos} donde van los artículos y {total} donde va el total." }
+    ]}
+  ];
+
+  function combinarContenido(base, extra){
+    const r = { ...base };
+    for(const k of Object.keys(extra || {})){
+      const v = extra[k];
+      r[k] = (v && typeof v === "object" && !Array.isArray(v) && r[k] && typeof r[k] === "object" && !Array.isArray(r[k]))
+        ? combinarContenido(r[k], v)
+        : v;
+    }
+    return r;
+  }
+  const getValor = (obj, clave) => clave.split(".").reduce((o, k) => (o == null ? undefined : o[k]), obj);
+  function setValor(obj, clave, valor){
+    const partes = clave.split(".");
+    const ultimo = partes.pop();
+    partes.reduce((o, k) => o[k], obj)[ultimo] = valor;
+  }
+  const esc = s => String(s ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+
   /* ================= estado ================= */
   const $ = s => document.querySelector(s);
   let config  = null;    // {usuario, repo, rama, token}
   let productos = [];
   let shaProductos = null;
   let fotosPendientes = {}; // id -> base64 (imagen nueva por subir)
+  let contenido = null;     // contenido de la tienda (colores, textos…)
+  let shaContenido = null;
+  let imagenesPendientes = {}; // ruta -> {datos, mime} (logo / imagen del héroe)
   let cambiosPendientes = false;
   let editandoId = null;
   let editandoEsNuevo = false;
@@ -352,16 +540,35 @@
       $("#mensaje-estado").textContent =
         "El repositorio aún no tiene productos.json: se creará la primera vez que guardes.";
       renderLista();
-      return;
+    }else{
+      if(!r.ok) throw new Error(await errorDe(r));
+      const j = await r.json();
+      shaProductos = j.sha;
+      productos = JSON.parse(base64ATexto(j.content.replace(/\s/g, "")));
+      if(!Array.isArray(productos)) productos = [];
+      productos = productos.map(normalizarProducto);
+      renderLista();
     }
-    if(!r.ok) throw new Error(await errorDe(r));
-    const j = await r.json();
-    shaProductos = j.sha;
-    productos = JSON.parse(base64ATexto(j.content.replace(/\s/g, "")));
-    if(!Array.isArray(productos)) productos = [];
-    productos = productos.map(normalizarProducto);
-    $("#mensaje-estado").textContent = "";
-    renderLista();
+    await cargarContenido();
+  }
+
+  async function cargarContenido(){
+    contenido = combinarContenido(CONTENIDO_BASE, null);
+    shaContenido = null;
+    try{
+      const r = await gh("contenido.json");
+      if(r.ok){
+        const j = await r.json();
+        const datos = JSON.parse(base64ATexto(j.content.replace(/\s/g, "")));
+        if(datos && typeof datos === "object" && !Array.isArray(datos)){
+          contenido = combinarContenido(CONTENIDO_BASE, datos);
+          shaContenido = j.sha;
+        }
+      }
+      /* Si aún no existe contenido.json o falla, se usan los valores base
+         y se creará/arreglará la primera vez que guardes. */
+    }catch(e){}
+    renderContenido();
   }
 
   /* ================= guardar en la web ================= */
@@ -383,6 +590,17 @@
         await subirFoto(+id, fotosPendientes[id]);
         delete fotosPendientes[id];
       }
+      for(const ruta of Object.keys(imagenesPendientes)){
+        await subirImagen(ruta, imagenesPendientes[ruta]);
+        delete imagenesPendientes[ruta];
+      }
+
+      const textoContenido = JSON.stringify(contenido, null, 2);
+      const cuerpoC = { message: "Actualiza colores y textos de la tienda", content: textoABase64(textoContenido), branch: config.rama };
+      if(shaContenido) cuerpoC.sha = shaContenido;
+      const rc = await gh("contenido.json", "PUT", cuerpoC);
+      if(!rc.ok) throw new Error(await errorDe(rc));
+      shaContenido = (await rc.json()).content.sha;
 
       cambiosPendientes = false;
       actualizarPendiente();
@@ -406,6 +624,17 @@
     if(sha) cuerpo.sha = sha;
     const r = await gh(ruta, "PUT", cuerpo);
     if(!r.ok) throw new Error("No pude subir la foto del producto " + id + ". " + await errorDe(r));
+  }
+
+  /* Sube el logo o la imagen del héroe: img = {datos: base64, mime} */
+  async function subirImagen(ruta, img){
+    let sha = null;
+    const r0 = await gh(ruta);
+    if(r0.ok) sha = (await r0.json()).sha;
+    const cuerpo = { message: "Actualiza " + ruta, content: img.datos, branch: config.rama };
+    if(sha) cuerpo.sha = sha;
+    const r = await gh(ruta, "PUT", cuerpo);
+    if(!r.ok) throw new Error("No pude subir " + ruta + ". " + await errorDe(r));
   }
 
   function marcarPendiente(){
@@ -515,20 +744,85 @@
     cerrarEditor();
   }
 
-  async function prepararFoto(archivo){
+  /* Reduce y convierte la imagen elegida. Tipo "image/png" para logos
+     (conserva la transparencia) o "image/jpeg" para fotos. */
+  async function prepararImagen(archivo, ladoMax, tipo, calidad = 0.82){
     const bmp = await createImageBitmap(archivo);
-    const cargar = async (lado, calidad) => {
+    const cargar = async (lado) => {
       const escala = Math.min(1, lado / Math.max(bmp.width, bmp.height));
       const c = document.createElement("canvas");
       c.width  = Math.max(1, Math.round(bmp.width * escala));
       c.height = Math.max(1, Math.round(bmp.height * escala));
       c.getContext("2d").drawImage(bmp, 0, 0, c.width, c.height);
-      const blob = await new Promise(res => c.toBlob(res, "image/jpeg", calidad));
+      const blob = await new Promise(res => c.toBlob(res, tipo, calidad));
       return new Uint8Array(await blob.arrayBuffer());
     };
-    let bytes = await cargar(1000, 0.82);
-    if(bytes.length > 850 * 1024) bytes = await cargar(700, 0.72);
+    let bytes = await cargar(ladoMax);
+    if(bytes.length > 850 * 1024) bytes = await cargar(Math.round(ladoMax * 0.7));
     return bytesABase64(bytes);
+  }
+
+  async function prepararFoto(archivo){
+    return prepararImagen(archivo, 1000, "image/jpeg", 0.82);
+  }
+
+  /* ================= editor de contenido (colores y textos) ================= */
+  function campoHTML(campo){
+    const id = "c-" + campo.clave.replace(/\./g, "-");
+    const valor = getValor(contenido, campo.clave);
+    const nota = campo.nota ? `<p class="nota" style="margin:5px 0 0">${esc(campo.nota)}</p>` : "";
+    if(campo.tipo === "color"){
+      return `<label for="${id}">${esc(campo.etiqueta)}</label>
+      <div class="campo-color">
+        <input type="color" id="${id}" data-clave="${campo.clave}" data-color value="${esc(valor)}">
+        <input type="text" data-clave="${campo.clave}" data-colorhex value="${esc(valor)}" aria-label="${esc(campo.etiqueta)} (código de color)">
+      </div>${nota}`;
+    }
+    if(campo.tipo === "textarea"){
+      return `<label for="${id}">${esc(campo.etiqueta)}</label>
+      <textarea id="${id}" data-clave="${campo.clave}">${esc(valor)}</textarea>${nota}`;
+    }
+    if(campo.tipo === "imagen"){
+      return `<label>${esc(campo.etiqueta)}</label>
+      <div class="vista-imagen campo-imagen" data-clave="${campo.clave}" data-destino="${campo.destino}" data-formato="${campo.formato}">
+        <span class="mini" data-vista></span>
+        <div>
+          <input type="file" accept="image/*">
+          <p class="nota" data-nota style="margin:6px 0 0"></p>
+          ${campo.quitable ? '<button class="btn btn-mini" type="button" data-quitar style="margin-top:8px">Quitar imagen</button>' : ""}
+        </div>
+      </div>${nota}`;
+    }
+    return `<label for="${id}">${esc(campo.etiqueta)}</label>
+    <input type="text" id="${id}" data-clave="${campo.clave}" value="${esc(valor)}"${campo.inputmode ? ` inputmode="${campo.inputmode}"` : ""}>${nota}`;
+  }
+
+  function renderContenido(){
+    $("#editor-contenido").innerHTML = ESQUEMA_CONTENIDO.map(seccion => `
+      <div class="tarjeta tarjeta-seccion">
+        <h2 style="font-size:22px">${esc(seccion.titulo)}</h2>
+        ${seccion.nota ? `<p class="nota" style="margin:6px 0 0">${esc(seccion.nota)}</p>` : ""}
+        ${seccion.campos.map(campoHTML).join("")}
+      </div>`).join("");
+    document.querySelectorAll("#editor-contenido .campo-imagen").forEach(refrescarCampoImagen);
+  }
+
+  function refrescarCampoImagen(cont){
+    const valor = getValor(contenido, cont.dataset.clave);
+    const pendiente = imagenesPendientes[cont.dataset.destino];
+    const vista = cont.querySelector("[data-vista]");
+    if(pendiente){
+      vista.classList.remove("vacia");
+      vista.innerHTML = '<img src="data:' + pendiente.mime + ';base64,' + pendiente.datos + '" alt="">';
+    }else if(valor){
+      vista.classList.remove("vacia");
+      vista.innerHTML = '<img src="' + esc(valor) + '" alt="" onerror="this.remove()">';
+    }else{
+      vista.classList.add("vacia");
+      vista.innerHTML = "";
+    }
+    cont.querySelector("[data-nota]").textContent =
+      valor ? "En la tienda ahora: " + valor : "Nada asignado todavía.";
   }
 
   /* ================= eventos ================= */
@@ -536,7 +830,7 @@
   $("#token").addEventListener("keydown", e => { if(e.key === "Enter") conectar(); });
   $("#btnSalir").addEventListener("click", salir);
   $("#btnGuardar").addEventListener("click", guardarEnWeb);
-  $("#btnNuevo").addEventListener("click", () => abrirEditor(null));
+  $("#btnNuevo").addEventListener("click", () => { mostrarTab("productos"); abrirEditor(null); });
   $("#btnGuardarProducto").addEventListener("click", guardarProducto);
   $("#btnCancelarProducto").addEventListener("click", cerrarEditor);
   $("#e-foto").addEventListener("change", async e => {
@@ -577,6 +871,73 @@
       }
     }
   });
+
+  /* --- eventos del editor de contenido --- */
+  $("#editor-contenido").addEventListener("input", e => {
+    const el = e.target;
+    const clave = el.dataset.clave;
+    if(!clave) return;
+    if(el.dataset.colorhex !== undefined){
+      const t = el.value.trim();
+      if(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(t)){
+        setValor(contenido, clave, t);
+        const picker = el.parentElement.querySelector("[data-color]");
+        if(picker) picker.value = t;
+      }
+    }else if(el.dataset.color !== undefined){
+      setValor(contenido, clave, el.value);
+      const hex = el.parentElement.querySelector("[data-colorhex]");
+      if(hex) hex.value = el.value;
+    }else{
+      setValor(contenido, clave, el.value);
+    }
+    marcarPendiente();
+  });
+
+  $("#editor-contenido").addEventListener("change", async e => {
+    if(e.target.type !== "file") return;
+    const cont = e.target.closest(".campo-imagen");
+    if(!cont) return;
+    const archivo = e.target.files[0];
+    if(!archivo) return;
+    const estado = $("#mensaje-estado");
+    estado.textContent = "Procesando imagen…";
+    try{
+      const destino = cont.dataset.destino;
+      const png = cont.dataset.formato === "png";
+      imagenesPendientes[destino] = {
+        datos: png
+          ? await prepararImagen(archivo, 800, "image/png")
+          : await prepararImagen(archivo, 1400, "image/jpeg", 0.82),
+        mime: png ? "image/png" : "image/jpeg"
+      };
+      setValor(contenido, cont.dataset.clave, destino);
+      marcarPendiente();
+      estado.textContent = "";
+      refrescarCampoImagen(cont);
+    }catch(err){
+      estado.textContent = "No pude leer esa imagen. Prueba con otra (JPG o PNG).";
+      e.target.value = "";
+    }
+  });
+
+  $("#editor-contenido").addEventListener("click", e => {
+    const quitar = e.target.closest("[data-quitar]");
+    if(!quitar) return;
+    const cont = quitar.closest(".campo-imagen");
+    setValor(contenido, cont.dataset.clave, "");
+    delete imagenesPendientes[cont.dataset.destino];
+    marcarPendiente();
+    refrescarCampoImagen(cont);
+  });
+
+  /* --- pestañas --- */
+  function mostrarTab(nombre){
+    document.querySelectorAll(".tab").forEach(x => x.classList.toggle("activa", x.dataset.tab === nombre));
+    $("#panel-productos").classList.toggle("oculto", nombre !== "productos");
+    $("#panel-contenido").classList.toggle("oculto", nombre !== "contenido");
+  }
+  document.querySelectorAll(".tab").forEach(t => t.addEventListener("click", () => mostrarTab(t.dataset.tab)));
 
   /* ================= arranque ================= */
   (function arrancar(){
