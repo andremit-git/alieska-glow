@@ -53,6 +53,7 @@
     background:var(--blanco);border:var(--borde);border-radius:16px;
     padding:9px 16px;font-family:inherit;font-weight:800;font-size:16px;color:var(--tinta);
     cursor:pointer;transition:transform .15s;
+    touch-action:manipulation;-webkit-tap-highlight-color:transparent;
   }
   .cart-btn:hover{transform:translate(-2px,-2px)}
   .cart-count{
@@ -206,12 +207,14 @@
 
   /* ---------- carrito ---------- */
   .overlay{position:fixed;inset:0;background:color-mix(in srgb,var(--tinta) 45%,transparent);z-index:90}
+  .overlay[hidden]{display:none!important}
   .drawer{
-    position:fixed;top:0;right:0;height:100dvh;width:min(420px,100%);
+    position:fixed;top:0;right:0;height:100vh;height:100dvh;width:min(420px,100%);
     background:var(--blanco);border-left:var(--borde);z-index:100;
     display:flex;flex-direction:column;
     transform:translateX(105%);
     transition:transform .3s cubic-bezier(.2,.8,.2,1);
+    overscroll-behavior:contain;
   }
   .drawer.abierta{transform:none}
   .drawer-head{
@@ -225,7 +228,7 @@
     font-family:inherit;color:var(--tinta);
   }
   .cerrar:hover{background:var(--lima)}
-  .items{list-style:none;margin:0;padding:0;flex:1;overflow:auto}
+  .items{list-style:none;margin:0;padding:0;flex:1;overflow:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;touch-action:pan-y}
   .item{display:flex;align-items:center;gap:13px;padding:14px 22px;border-bottom:2px dashed color-mix(in srgb,var(--tinta) 16%,transparent)}
   .mini{width:46px;height:46px;border-radius:50%;border:var(--borde);flex:none;position:relative;overflow:hidden}
   .mini img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
@@ -526,12 +529,16 @@
         if(Array.isArray(datos)) PRODUCTOS = datos.map(p => normalizarProducto({ ...p }));
       }
     }catch(e){ /* sin servidor: quedan los de respaldo */ }
+    limpiarCarrito();
     renderCatalogo();
     actualizarContador();
   }
 
   let carrito = {};
-  try { carrito = JSON.parse(localStorage.getItem("alieska-carrito")) || {}; } catch(e){ carrito = {}; }
+  try {
+    const guardado = JSON.parse(localStorage.getItem("alieska-carrito"));
+    if(guardado && typeof guardado === "object" && !Array.isArray(guardado)) carrito = guardado;
+  } catch(e){ carrito = {}; }
 
   const decimalesDe = v => Number.isInteger(v) ? 0 : 2;
   const fmtUsd = n => {
@@ -573,6 +580,25 @@
     return partes.join(" · ") || "—";
   }
   const buscar = id => PRODUCTOS.find(p => p.id === +id);
+  const coloresDe = p => (p && Array.isArray(p.colores) && p.colores.length >= 2)
+    ? p.colores
+    : ["#FFD3E3", "#E02D6D"];
+
+  /* Borra del carrito los productos que ya no existen (p. ej. borrados desde
+     el panel). Sin esto, un carrito viejo guardado en el teléfono rompía
+     renderCarrito y el cajón ya no abría: parecía que "no hace nada". */
+  function limpiarCarrito(){
+    let cambio = false;
+    for(const id of Object.keys(carrito)){
+      const cantidad = carrito[id];
+      if(!buscar(id) || !(Number(cantidad) > 0)){
+        delete carrito[id];
+        cambio = true;
+      }
+    }
+    if(cambio) guardar();
+    return cambio;
+  }
 
   function guardar(){ try{ localStorage.setItem("alieska-carrito", JSON.stringify(carrito)); }catch(e){} }
 
@@ -580,11 +606,12 @@
     document.getElementById("grid").innerHTML = PRODUCTOS.map(p => {
       const agotado = !p.disponible;
       const precios = precioHTML(p);
+      const [c1, c2] = coloresDe(p);
       return `
       <article class="card${agotado ? " agotado" : ""}">
         <div class="swatch" style="background:
           radial-gradient(circle at 30% 24%, rgba(255,255,255,.9), rgba(255,255,255,0) 44%),
-          linear-gradient(135deg, ${p.colores[0]}, ${p.colores[1]})">
+          linear-gradient(135deg, ${c1}, ${c2})">
           <img src="img/producto-${p.id}.jpg" alt="Foto de ${p.nombre}" loading="lazy" onerror="this.remove()">
         </div>
         <span class="estado ${agotado ? "no" : "ok"}"><span class="punto"></span>${agotado ? CONTENIDO.carrito.textoAgotado : CONTENIDO.carrito.textoDisponible}</span>
@@ -601,7 +628,7 @@
   }
 
   function actualizarContador(){
-    const n = Object.values(carrito).reduce((s,q)=>s+q,0);
+    const n = Object.values(carrito).reduce((s,q)=>(s + (Number(q) > 0 ? Number(q) : 0)),0);
     const c = document.getElementById("contador");
     c.textContent = n;
     document.getElementById("btnCarrito").setAttribute("aria-label", `Abrir ${CONTENIDO.barra.textoCarrito || "carrito"}, ${n} productos`);
@@ -609,6 +636,7 @@
   }
 
   function agregar(id, btn){
+    if(!buscar(id)) return;
     carrito[id] = (carrito[id] || 0) + 1;
     guardar(); actualizarContador();
     if(btn){
@@ -623,11 +651,11 @@
   const btnCart = document.getElementById("btnCarrito");
 
   function abrirCarrito(){
-    renderCarrito();
+    try{ limpiarCarrito(); renderCarrito(); }catch(e){ /* igual abrimos el cajón */ }
     drawer.classList.add("abierta");
     overlay.hidden = false;
     document.body.style.overflow = "hidden";
-    drawer.focus();
+    try{ drawer.focus({ preventScroll: true }); }catch(e){ try{ drawer.focus(); }catch(_){} }
   }
   function cerrarCarrito(){
     drawer.classList.remove("abierta");
@@ -637,8 +665,9 @@
   }
 
   function renderCarrito(){
+    limpiarCarrito();
     const ul = document.getElementById("items");
-    const ids = Object.keys(carrito);
+    const ids = Object.keys(carrito).filter(id => buscar(id));
     if(!ids.length){
       ul.innerHTML = `<li class="vacio">
         <span class="cara" aria-hidden="true">🛍️</span>
@@ -648,8 +677,9 @@
     } else {
       ul.innerHTML = ids.map(id => {
         const p = buscar(id), q = carrito[id];
+        const [c1, c2] = coloresDe(p);
         return `<li class="item">
-          <span class="mini" style="background:linear-gradient(135deg, ${p.colores[0]}, ${p.colores[1]})">
+          <span class="mini" style="background:linear-gradient(135deg, ${c1}, ${c2})">
             <img src="img/producto-${p.id}.jpg" alt="" loading="lazy" onerror="this.remove()">
           </span>
           <div class="item-info">
@@ -670,7 +700,8 @@
   }
 
   function enviarWhatsApp(){
-    const ids = Object.keys(carrito);
+    limpiarCarrito();
+    const ids = Object.keys(carrito).filter(id => buscar(id));
     if(!ids.length) return;
     const lineas = ids.map(id => {
       const p = buscar(id);
