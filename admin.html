@@ -167,8 +167,12 @@
       <label for="e-nombre">Nombre</label>
       <input type="text" id="e-nombre" placeholder="Ej. Labial mate «Cereza»">
 
-      <label for="e-precio">Precio (solo el número)</label>
-      <input type="number" id="e-precio" min="0" step="1" placeholder="8500">
+      <label for="e-precio-usd">Precio en dólares ($)</label>
+      <input type="text" inputmode="decimal" id="e-precio-usd" placeholder="Ej. 7 o 7.50">
+
+      <label for="e-precio-bs">Precio en bolívares (Bs.)</label>
+      <input type="text" inputmode="decimal" id="e-precio-bs" placeholder="Ej. 8,50">
+      <p class="nota" style="margin:5px 0 0">Escribe al menos uno de los dos. Para los decimales sirve la coma o el punto: 8,50 o 8.50.</p>
 
       <label for="e-detalle">Descripción corta</label>
       <textarea id="e-detalle" placeholder="Ej. Cobertura total, fórmula aterciopelada"></textarea>
@@ -219,7 +223,44 @@
   let editandoId = null;
   let editandoEsNuevo = false;
 
-  const fmt = n => "$" + Number(n || 0).toLocaleString("es-MX");
+  const decimalesDe = v => Number.isInteger(v) ? 0 : 2;
+  const fmtUsd = n => {
+    const v = Number(n || 0), d = decimalesDe(v);
+    return "$" + v.toLocaleString("en-US", { minimumFractionDigits: d, maximumFractionDigits: d });
+  };
+  const fmtBs = n => {
+    const v = Number(n || 0), d = decimalesDe(v);
+    const [ent, dec] = Math.abs(v).toFixed(d).split(".");
+    const entero = ent.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    return "Bs. " + (v < 0 ? "-" : "") + entero + (dec ? "," + dec : "");
+  };
+  /* "$7 · Bs. 8,50" — muestra solo los precios que el producto tenga */
+  const preciosTexto = p => {
+    const partes = [];
+    if(p.precioUsd != null) partes.push(fmtUsd(p.precioUsd));
+    if(p.precioBs  != null) partes.push(fmtBs(p.precioBs));
+    return partes.join(" · ");
+  };
+
+  /* Acepta precios con coma o punto como separador decimal: "8,5", "8.5", "1,234.56", "8500" */
+  function parsearPrecio(texto){
+    let t = String(texto).trim().replace(/[$\s]/g, "");
+    if(!t) return NaN;
+    const ultimo = Math.max(t.lastIndexOf(","), t.lastIndexOf("."));
+    if(ultimo === -1) return Number(t);
+    const enteros   = t.slice(0, ultimo).replace(/[.,]/g, "");
+    const decimales = t.slice(ultimo + 1);
+    return Number(enteros + "." + decimales);
+  }
+
+  /* Productos antiguos con un solo «precio»: se toman como dólares */
+  function normalizarProducto(p){
+    if(p.precioUsd == null && p.precioBs == null && p.precio != null){
+      p.precioUsd = p.precio;
+    }
+    delete p.precio;
+    return p;
+  }
 
   /* ================= utilidades base64 (soporta acentos) ================= */
   function bytesABase64(bytes){
@@ -306,7 +347,7 @@
   async function cargar(){
     const r = await gh("productos.json");
     if(r.status === 404){
-      productos = PRODUCTOS_EJEMPLO.map(p => ({ ...p }));
+      productos = PRODUCTOS_EJEMPLO.map(p => normalizarProducto({ ...p }));
       shaProductos = null;
       $("#mensaje-estado").textContent =
         "El repositorio aún no tiene productos.json: se creará la primera vez que guardes.";
@@ -318,6 +359,7 @@
     shaProductos = j.sha;
     productos = JSON.parse(base64ATexto(j.content.replace(/\s/g, "")));
     if(!Array.isArray(productos)) productos = [];
+    productos = productos.map(normalizarProducto);
     $("#mensaje-estado").textContent = "";
     renderLista();
   }
@@ -391,7 +433,7 @@
           <strong>${p.nombre}</strong>
           <span>${p.detalle || ""}</span>
         </div>
-        <span class="fila-precio">${fmt(p.precio)}</span>
+        <span class="fila-precio">${preciosTexto(p) || "—"}</span>
         <label class="interruptor" title="Marcar disponible o agotado">
           <input type="checkbox" data-toggle="${p.id}" ${p.disponible ? "checked" : ""}>
           <span class="pista"></span>
@@ -409,7 +451,8 @@
     editandoEsNuevo = !p;
     $("#editor-titulo").textContent = p ? "Editar producto" : "Nuevo producto";
     $("#e-nombre").value   = p ? p.nombre : "";
-    $("#e-precio").value   = p ? p.precio : "";
+    $("#e-precio-usd").value = p && p.precioUsd != null ? p.precioUsd : "";
+    $("#e-precio-bs").value  = p && p.precioBs  != null ? p.precioBs  : "";
     $("#e-detalle").value  = p ? (p.detalle || "") : "";
     $("#e-disponible").checked = p ? !!p.disponible : true;
     $("#e-foto").value = "";
@@ -434,20 +477,35 @@
 
   function guardarProducto(){
     const nombre = $("#e-nombre").value.trim();
-    const precio = Math.round(Number($("#e-precio").value));
     if(!nombre){ alert("Escribe el nombre del producto."); return; }
-    if(!precio || precio <= 0){ alert("Escribe un precio válido (solo el número)."); return; }
+
+    const textoUsd = $("#e-precio-usd").value.trim();
+    const textoBs  = $("#e-precio-bs").value.trim();
+    const usd = textoUsd === "" ? null : parsearPrecio(textoUsd);
+    const bs  = textoBs  === "" ? null : parsearPrecio(textoBs);
+    const usdOk = usd !== null && isFinite(usd) && usd > 0;
+    const bsOk  = bs  !== null && isFinite(bs)  && bs  > 0;
+    if((usd !== null && !usdOk) || (bs !== null && !bsOk)){
+      alert("Uno de los precios no es válido. Usa solo números (8,50 o 8.50).");
+      return;
+    }
+    if(!usdOk && !bsOk){
+      alert("Escribe al menos un precio: en dólares o en bolívares.");
+      return;
+    }
 
     const existente = productos.find(p => p.id === editandoId);
     const datos = {
       id: editandoId,
       nombre,
       detalle: $("#e-detalle").value.trim(),
-      precio,
       disponible: $("#e-disponible").checked,
       colores: existente ? existente.colores : ["#FF8FB1", "#E02D6D"]
     };
+    if(usdOk) datos.precioUsd = usd;
+    if(bsOk)  datos.precioBs  = bs;
     if(existente){
+      delete existente.precio; delete existente.precioUsd; delete existente.precioBs;
       Object.assign(existente, datos);
     } else {
       productos.push(datos);

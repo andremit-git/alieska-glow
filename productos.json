@@ -3,7 +3,7 @@
     "id": 9,
     "nombre": "Corrector Dolce Bella",
     "detalle": "Corrector, hidratante y de alta cobertura",
-    "precio": 9,
+    "precioUsd": 9,
     "disponible": true,
     "colores": [
       "#FF8FB1",

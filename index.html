@@ -158,7 +158,9 @@
   .precio{
     background:var(--lima);border:var(--borde);border-radius:999px;
     padding:4px 13px;font-weight:800;font-size:15px;white-space:nowrap;
+    display:inline-flex;flex-direction:column;align-items:flex-start;line-height:1.15;
   }
+  .precio small{font-size:11.5px;font-weight:700;color:rgba(58,15,39,.75)}
   .btn-agregar{
     background:var(--rosa);color:#fff;border:var(--borde);border-radius:999px;
     padding:9px 20px;font-family:inherit;font-weight:800;font-size:15px;cursor:pointer;
@@ -357,15 +359,23 @@
     { id:8, nombre:"Set de brochas · 6 pzs",  detalle:"Fibras suaves + neceser de regalo",       precio:14500, disponible:true,  colores:["#E7D4EF","#9C7BB9"] }
   ];
 
+  /* Productos antiguos con un solo «precio»: se toman como dólares. */
+  function normalizarProducto(p){
+    if(p.precioUsd == null && p.precioBs == null && p.precio != null){
+      p.precioUsd = p.precio;
+    }
+    return p;
+  }
+
   /* La lista real se carga de productos.json (la administra el panel admin.html). */
-  let PRODUCTOS = PRODUCTOS_BASE.slice();
+  let PRODUCTOS = PRODUCTOS_BASE.map(p => normalizarProducto({ ...p }));
 
   async function iniciar(){
     try{
       const r = await fetch("productos.json?_=" + Date.now());
       if(r.ok){
         const datos = await r.json();
-        if(Array.isArray(datos)) PRODUCTOS = datos;
+        if(Array.isArray(datos)) PRODUCTOS = datos.map(p => normalizarProducto({ ...p }));
       }
     }catch(e){ /* sin servidor: quedan los de respaldo */ }
     renderCatalogo();
@@ -375,7 +385,45 @@
   let carrito = {};
   try { carrito = JSON.parse(localStorage.getItem("alieska-carrito")) || {}; } catch(e){ carrito = {}; }
 
-  const fmt = n => "$" + n.toLocaleString("es-MX");
+  const decimalesDe = v => Number.isInteger(v) ? 0 : 2;
+  const fmtUsd = n => {
+    const v = Number(n || 0), d = decimalesDe(v);
+    return "$" + v.toLocaleString("en-US", { minimumFractionDigits: d, maximumFractionDigits: d });
+  };
+  const fmtBs = n => {
+    const v = Number(n || 0), d = decimalesDe(v);
+    const [ent, dec] = Math.abs(v).toFixed(d).split(".");
+    const entero = ent.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    return "Bs. " + (v < 0 ? "-" : "") + entero + (dec ? "," + dec : "");
+  };
+  /* "$7 · Bs. 8,50" (× cantidad) — muestra solo los precios que el producto tenga */
+  function preciosTexto(p, cantidad = 1){
+    const partes = [];
+    if(p.precioUsd != null) partes.push(fmtUsd(p.precioUsd * cantidad));
+    if(p.precioBs  != null) partes.push(fmtBs(p.precioBs * cantidad));
+    return partes.join(" · ");
+  }
+  /* Para la tarjeta: dólares arriba, bolívares debajo */
+  function precioHTML(p){
+    const usd = p.precioUsd != null ? fmtUsd(p.precioUsd) : null;
+    const bs  = p.precioBs  != null ? fmtBs(p.precioBs)  : null;
+    if(usd && bs) return `${usd}<small>${bs}</small>`;
+    return usd || bs || "";
+  }
+  /* Total del carrito: cada producto suma a la moneda en que tenga precio */
+  function totalesTexto(){
+    let usd = 0, bs = 0;
+    for(const id of Object.keys(carrito)){
+      const p = buscar(id);
+      if(!p) continue;
+      if(p.precioUsd != null) usd += p.precioUsd * carrito[id];
+      else if(p.precioBs != null) bs += p.precioBs * carrito[id];
+    }
+    const partes = [];
+    if(usd) partes.push(fmtUsd(usd));
+    if(bs)  partes.push(fmtBs(bs));
+    return partes.join(" · ") || "—";
+  }
   const buscar = id => PRODUCTOS.find(p => p.id === +id);
 
   function guardar(){ try{ localStorage.setItem("alieska-carrito", JSON.stringify(carrito)); }catch(e){} }
@@ -383,6 +431,7 @@
   function renderCatalogo(){
     document.getElementById("grid").innerHTML = PRODUCTOS.map(p => {
       const agotado = !p.disponible;
+      const precios = precioHTML(p);
       return `
       <article class="card${agotado ? " agotado" : ""}">
         <div class="swatch" style="background:
@@ -394,7 +443,7 @@
         <h3>${p.nombre}</h3>
         <p class="desc">${p.detalle}</p>
         <div class="card-foot">
-          <span class="precio">${fmt(p.precio)}</span>
+          ${precios ? `<span class="precio">${precios}</span>` : ""}
           ${agotado
             ? `<button class="btn-agregar" disabled aria-label="${p.nombre} agotado, no disponible">Agotado</button>`
             : `<button class="btn-agregar" data-agregar="${p.id}" aria-label="Agregar ${p.nombre} al carrito">Agregar</button>`}
@@ -457,7 +506,7 @@
           </span>
           <div class="item-info">
             <strong>${p.nombre}</strong>
-            <span class="item-precio">${fmt(p.precio * q)}</span>
+            <span class="item-precio">${preciosTexto(p, q)}</span>
           </div>
           <div class="stepper">
             <button data-acc="menos" data-id="${id}" aria-label="Quitar una unidad de ${p.nombre}">−</button>
@@ -467,8 +516,7 @@
         </li>`;
       }).join("");
     }
-    const total = ids.reduce((s,id)=> s + buscar(id).precio * carrito[id], 0);
-    document.getElementById("total").textContent = fmt(total);
+    document.getElementById("total").textContent = totalesTexto();
     document.getElementById("btnEnviar").disabled = !ids.length;
     document.getElementById("btnEnviar").style.opacity = ids.length ? "1" : ".5";
   }
@@ -478,10 +526,9 @@
     if(!ids.length) return;
     const lineas = ids.map(id => {
       const p = buscar(id);
-      return `• ${carrito[id]} × ${p.nombre} — ${fmt(p.precio * carrito[id])}`;
+      return `• ${carrito[id]} × ${p.nombre} — ${preciosTexto(p, carrito[id])}`;
     });
-    const total = ids.reduce((s,id)=> s + buscar(id).precio * carrito[id], 0);
-    const msg = `¡Hola! ✿ Quiero hacer un pedido:\n\n${lineas.join("\n")}\n\nTotal: ${fmt(total)}\n\n¿Me confirmas disponibilidad y envío? ¡Gracias!`;
+    const msg = `¡Hola! ✿ Quiero hacer un pedido:\n\n${lineas.join("\n")}\n\nTotal: ${totalesTexto()}\n\n¿Me confirmas disponibilidad y envío? ¡Gracias!`;
     window.open(`https://wa.me/${NUMERO_WHATSAPP}?text=${encodeURIComponent(msg)}`, "_blank");
   }
 

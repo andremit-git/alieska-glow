@@ -26,11 +26,11 @@ La manera fácil es el **panel de administración** (paso 5 de la sección 4): a
 Si prefieres editar a mano, abre `productos.json` (o el bloque `PRODUCTOS_BASE` de `index.html`, que es el respaldo). Cada producto es una línea:
 
 ```js
-{ id:1, nombre:"Labial mate «Rosa Nube»", detalle:"Cobertura total, fórmula aterciopelada", precio:8500, disponible:true, colores:["#FF8FB1","#E02D6D"] },
+{ id:1, nombre:"Labial mate «Rosa Nube»", detalle:"Cobertura total, fórmula aterciopelada", precioUsd:7, precioBs:250, disponible:true, colores:["#FF8FB1","#E02D6D"] },
 ```
 
 - `nombre` y `detalle`: el texto que se muestra.
-- `precio`: número sin puntos ni comas (`8500` = $8,500).
+- `precioUsd` y `precioBs`: el precio en dólares y en bolívares. **Al menos uno de los dos debe estar** (`precioUsd: 7`, `precioBs: 250`, o los dos). En la tienda se muestran los dos con su moneda ($ y Bs.). Los productos antiguos que tengan solo `precio` se muestran como dólares.
 - `disponible`: `true` si hay stock, `false` para marcarlo como agotado (se ve gris, dice «Agotado» y no se puede agregar).
 - `colores`: los dos tonos del cuadrito de respaldo que se ve si una foto falta. Códigos de color en [htmlcolorcodes.com](https://htmlcolorcodes.com/es/).
 
@@ -88,7 +88,7 @@ A partir de aquí, cada vez que guardes cambios en el panel, Netlify publica la 
 
 1. Abre `tu-direccion-web/admin.html` (guárdala en favoritos).
 2. Pega tu usuario, el repositorio `alieska-glow` y el token → **Conectar**.
-3. Desde ahí puedes: **agregar productos** (nombre, precio, descripción y foto desde tu celular), **editarlos**, **borrarlos** y activar/desactivar **disponible/agotado** con un interruptor.
+3. Desde ahí puedes: **agregar productos** (nombre, precio en dólares y/o bolívares, descripción y foto desde tu celular), **editarlos**, **borrarlos** y activar/desactivar **disponible/agotado** con un interruptor.
 4. Al terminar, presiona **«Guardar cambios en la web»**: en 1–2 minutos tu tienda pública se actualiza sola.
 
 Seguridad: el token vive solo en el navegador donde te conectas, nunca en las páginas públicas. Usa permisos limitados a ese repositorio y revócalo cuando quieras desde GitHub. No lo compartas ni lo publiques.
